@@ -6,6 +6,8 @@
 
 **[🇻🇳 Tiếng Việt](README_Vi.md)** · English
 
+> 📚 **Start here:** the full story lives in [`docs/index.md`](docs/index.md) — read everything in the documented order.
+
 ---
 
 ## About
@@ -38,6 +40,9 @@
 | [`nghien-cuu-open-source-contribution-finder.md`](nghien-cuu-open-source-contribution-finder.md) | Market research + feasibility + source verification |
 | [`thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md`](thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md) | Scoring model + portfolio design |
 | [`roadmap-mvp-open-source-contribution-finder.md`](roadmap-mvp-open-source-contribution-finder.md) | MVP build roadmap (weeks 1–4) |
+| [`docs/01-vision-strategy.md`](docs/01-vision-strategy.md) | Vision, problem, timing, personas, competitors, metrics, scope |
+| [`docs/02-business-model.md`](docs/02-business-model.md) | Monetization — who pays, when, how |
+| [`docs/03-decisions-handoff.md`](docs/03-decisions-handoff.md) | Decisions log + open questions + handoff checklist |
 
 ---
 

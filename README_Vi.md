@@ -6,6 +6,8 @@
 
 🇻🇳 Tiếng Việt · **[English](README.md)**
 
+> 📚 **Bắt đầu tại đây:** toàn bộ câu chuyện nằm trong [`docs/index.md`](docs/index.md) — đọc theo thứ tự để hiểu hết dự án.
+
 ---
 
 ## Giới thiệu
@@ -38,6 +40,9 @@
 | [`nghien-cuu-open-source-contribution-finder.md`](nghien-cuu-open-source-contribution-finder.md) | Nghiên cứu thị trường + tính khả thi + kiểm chứng nguồn |
 | [`thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md`](thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md) | Thiết kế scoring model + portfolio |
 | [`roadmap-mvp-open-source-contribution-finder.md`](roadmap-mvp-open-source-contribution-finder.md) | Roadmap build MVP tuần 1–4 |
+| [`docs/01-vision-strategy.md`](docs/01-vision-strategy.md) | Tầm nhìn, vấn đề, timing, persona, đối thủ, metrics, phạm vi |
+| [`docs/02-business-model.md`](docs/02-business-model.md) | Kiếm tiền — ai trả, khi nào, ra sao |
+| [`docs/03-decisions-handoff.md`](docs/03-decisions-handoff.md) | Kho quyết định + câu hỏi mở + checklist bàn giao |
 
 ---
 
