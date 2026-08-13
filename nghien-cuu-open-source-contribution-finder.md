@@ -173,8 +173,8 @@ Search API **chỉ trả metadata thô, không có chỉ số sẵn** về: main
 
 1. **Xu hướng label GFI:** nên tự đo thực nghiệm (query GitHub Archive / Trending theo thời gian) thay vì dựa 1 preprint. Nếu bạn muốn, mình có thể setup mini-scan.
 2. **Retention tại Việt Nam:** chưa có dữ liệu định lượng riêng cho VN về "tại sao junior bỏ sau PR đầu" — cần phỏng vấn / survey khi làm user research.
-3. **Mô hình kiếm tiền:** chưa chốt. Kênh tiềm năng: B2B (công ty tuyển junior / sponsor từ cộng đồng dev), portfolio-tự-động như "profile xin việc" (thu hút nhà tuyển dụng), hoặc marketplace issue mentor.
-4. **Scoring model chi tiết:** chưa chốt trọng số (weight) giữa freshness vs responsiveness vs repo health vs doc quality — cần validate bằng dữ liệu thật.
+3. **Mô hình kiếm tiền:** (open question của nghiên cứu) — đã chốt **định hướng = C — công cụ cộng đồng VN (OSS)** (`docs/04-oss-maintenance.md`). Monetize để sau validate, ưu tiên sponsor/cộng đồng; A (B2B) cần cân nhắc lại vì mâu thuẫn bản chất cộng đồng. Chi tiết: `docs/02-business-model.md`.
+4. **Scoring model chi tiết:** trọng số MVP đã chốt = **30/20/15/35 (priors)** (`docs/03-decisions-handoff.md` D3). Cần validate bằng dữ liệu thật qua vòng phản hồi outcome (V2) — priors ≠ sự thật đo được.
 
 ---
 

@@ -41,7 +41,6 @@
 | D3 | 2026-08-13 | **Trọng số Junior-first: 30/20/15/35 (responsiveness/repo/freshness/clarity)** | Khán giả là junior → clarity (hiểu việc) cao nhất. Repository "còn sống" tách làm hard filter (hết double-count với responsiveness). **Đã sửa lỗi normalization** (mỗi nhóm clamp 0–100 trước khi nhân trọng số) | Khi vòng phản hồi outcome cho trọng số thật (V2); đây là **priors** không phải sự thật |
 | D4 | 2026-08-13 | **MVP = 4 tuần, ship nhẹ, đo hành vi** | Triết lý: ship một thứ junior dùng được trong tuần 1; quyết định bằng hành vi người dùng thật, không bằng phân tích thêm | Mỗi gate G1/G2/G3 là cơ hội pivot |
 | D5 | 2026-08-13 | **Bản địa hoá VN làm khác biệt (persona An — junior VN)** | Phân khúc VN trống, VFOSSA + cộng đồng dev VN sẵn làm kênh; tool global không phớt lờ tiếng VN được | Khi mở rộng toàn cầu (V2 mở rộng ngôn ngữ) |
-| D6 | 2026-08-13 | **Repo private trước (chưa public)** | Chưa validate, muốn kiểm soát lộ trình. Có thể public sau khi MVP | Chủ dự án quyết khi nào public |
 | D7 | 2026-08-13 | **README song ngữ: `README.md` = EN chính + `README_Vi.md` = VI riêng** | Phục vụ cả community VN + global/tuyển dụng; giữ README chính bằng tiếng Anh cho reach rộng | Không — ổn định rồi |
 | D8 | 2026-08-13 | **Branch mặc định `main`** | Convention GitHub hiện đại; xoá master cũ khi set default | Không |
 | D9 | 2026-08-13 | **Định vị: C — Công cụ cộng đồng VN (OSS, MIT, public)** | Khớp động lực "cùng dùng, cùng đóng góp" (Q1). A (portfolio) gộp vào C — build-in-public tự có. B (monetize) trì hoãn sau validate. Rủi ro + vận hành solo: `docs/04-oss-maintenance.md` | Khi có người dùng thật + dữ liệu outcome → cân nhắc B |
@@ -51,7 +50,7 @@
 
 ## 3. Open Questions — câu hỏi CHƯA đóng (cần chủ dự án)
 
-> Những câu này phải trả lời trước khi vượt quá giai đoạn chiến lược. Đánh dấu mức độ khẩn.
+> Những câu này phải trả lời trước khi vượt quá giai đoạn chiến lược. Đánh dấu mức độ khẩn. (Q1, Q4 đã đóng — thay bằng D9/D10.)
 
 | # | Câu hỏi | Ảnh hưởng tới | Độ khẩn | Ghi chú |
 |---|---|---|---|---|

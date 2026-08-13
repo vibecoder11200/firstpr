@@ -43,6 +43,7 @@
 | [`docs/01-vision-strategy.md`](docs/01-vision-strategy.md) | Vision, problem, timing, personas, competitors, metrics, scope |
 | [`docs/02-business-model.md`](docs/02-business-model.md) | Monetization — who pays, when, how |
 | [`docs/03-decisions-handoff.md`](docs/03-decisions-handoff.md) | Decisions log + open questions + handoff checklist |
+| [`docs/04-oss-maintenance.md`](docs/04-oss-maintenance.md) | Solo-OSS operation playbook (risks, maintenance schedule) |
 
 ---
 

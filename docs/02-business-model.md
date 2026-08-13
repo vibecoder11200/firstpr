@@ -18,7 +18,9 @@
 
 ## 2. Ba hướng doanh thu (xếp theo mức ưu tiên)
 
-### Hướng A — B2B Recruit-Export (ưu tiên cao nhất)
+### Hướng A — B2B Recruit-Export (tiềm năng cao — NHƯNG xem lại sau khi chốt C)
+
+> ⚠️ **Cập nhật sau khi chốt định hướng C** (công cụ cộng đồng VN): Hướng A thu phí truy cập danh sách user **có thể mâu thuẫn với bản chất cộng đồng** — nên giữ lại như *lựa chọn tương lai*, nhưng không phải ưu tiên mặc định nữa. Xem §7.
 
 **Bán cho:** công ty tuyển junior VN.
 
@@ -94,5 +96,8 @@
 
 ## 7. Quyết định cần chủ dự án
 
-- Chọn **định hướng dài hạn** (quan trọng nhất): startup kiếm tiền / công cụ cộng đồng phi lợi nhuận / dự án portfolio cá nhân → thay đổi toàn bộ phần này.
-- Chốt mô hình giá cụ thể cho Hướng A/B (khi đến giai đoạn monetize).
+> ⚠️ **Đã chốt 2026-08-13:** định hướng dài hạn = **C — Công cụ cộng đồng VN (OSS)** (`docs/04-oss-maintenance.md` §1). Hệ quả cho mô hình doanh thu: private đã đổi thành public; monetize B (sponsor/cộng đồng) được ưu tiên, A (B2B recruit-export — thu phí truy cập danh sách user) **cần xem lại vì mâu thuẫn với bản chất cộng đồng** — phải cân nhắc sau khi có user thật, không phải mặc định.
+
+Vẫn cần chủ dự án:
+- Chốt mô hình giá cụ thể cho Hướng B (khi đến giai đoạn monetize).
+- Nếu đi hướng cộng đồng thuần, có thể không cần thu phí hoặc chỉ sponsor — đây là quyết định tách biệt khỏi hướng startup.
