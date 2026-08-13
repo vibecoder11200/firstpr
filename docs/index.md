@@ -18,6 +18,7 @@
 | 5 | [`roadmap-mvp-open-source-contribution-finder.md`](../roadmap-mvp-open-source-contribution-finder.md) | **LÀM GÌ** — roadmap 4 tuần + decision gates |
 | 6 | [`02-business-model.md`](02-business-model.md) | **AI TRẢ TIỀN** — monetization (sau validate) |
 | 7 | [`03-decisions-handoff.md`](03-decisions-handoff.md) | **QUYẾT ĐỊNH** + câu hỏi mở + checklist bàn giao |
+| 8 | [`04-oss-maintenance.md`](04-oss-maintenance.md) | **VẬN HÀNH** — định vị C (OSS), rủi ro, sổ tay solo |
 
 ---
 
@@ -41,6 +42,7 @@
 | Trọng số 30/20/15/35 | ✅ Chốt — **priors** (D3) |
 | MVP 4 tuần + gates | ✅ Chốt (D4) |
 | Bản địa hoá VN | ✅ Chốt (D5) |
-| **Mục tiêu dài hạn (portfolio/startup/community)** | 🔴 **CHƯA chốt — Q1, cần chủ dự án** |
+| **Mục tiêu dài hạn → Công cụ cộng đồng VN (OSS)** | ✅ Chốt (D9) |
+| **Public repo + MIT + dogfooding** | ✅ Chốt (D10) |
 
 Xem đầy đủ: [`03-decisions-handoff.md`](03-decisions-handoff.md)
