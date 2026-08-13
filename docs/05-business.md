@@ -96,7 +96,7 @@
 
 ## 7. Quyết định cần chủ dự án
 
-> ⚠️ **Đã chốt 2026-08-13:** định hướng dài hạn = **C — Công cụ cộng đồng VN (OSS)** (`docs/04-oss-maintenance.md` §1). Hệ quả cho mô hình doanh thu: private đã đổi thành public; monetize B (sponsor/cộng đồng) được ưu tiên, A (B2B recruit-export — thu phí truy cập danh sách user) **cần xem lại vì mâu thuẫn với bản chất cộng đồng** — phải cân nhắc sau khi có user thật, không phải mặc định.
+> ⚠️ **Đã chốt 2026-08-13:** định hướng dài hạn = **C — Công cụ cộng đồng VN (OSS)** (`06-oss.md` §1). Hệ quả cho mô hình doanh thu: private đã đổi thành public; monetize B (sponsor/cộng đồng) được ưu tiên, A (B2B recruit-export — thu phí truy cập danh sách user) **cần xem lại vì mâu thuẫn với bản chất cộng đồng** — phải cân nhắc sau khi có user thật, không phải mặc định.
 
 Vẫn cần chủ dự án:
 - Chốt mô hình giá cụ thể cho Hướng B (khi đến giai đoạn monetize).

@@ -37,13 +37,14 @@
 
 | File | Nội dung |
 |---|---|
-| [`nghien-cuu-open-source-contribution-finder.md`](nghien-cuu-open-source-contribution-finder.md) | Nghiên cứu thị trường + tính khả thi + kiểm chứng nguồn |
-| [`thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md`](thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md) | Thiết kế scoring model + portfolio |
-| [`roadmap-mvp-open-source-contribution-finder.md`](roadmap-mvp-open-source-contribution-finder.md) | Roadmap build MVP tuần 1–4 |
-| [`docs/01-vision-strategy.md`](docs/01-vision-strategy.md) | Tầm nhìn, vấn đề, timing, persona, đối thủ, metrics, phạm vi |
-| [`docs/02-business-model.md`](docs/02-business-model.md) | Kiếm tiền — ai trả, khi nào, ra sao |
-| [`docs/03-decisions-handoff.md`](docs/03-decisions-handoff.md) | Kho quyết định + câu hỏi mở + checklist bàn giao |
-| [`docs/04-oss-maintenance.md`](docs/04-oss-maintenance.md) | Sổ tay vận hành OSS solo (rủi ro + lịch bảo trì) |
+| [`docs/01-vision.md`](docs/01-vision.md) | Tầm nhìn, vấn đề, timing, persona, đối thủ, metrics, phạm vi |
+| [`docs/02-research.md`](docs/02-research.md) | Nghiên cứu thị trường + tính khả thi + kiểm chứng nguồn |
+| [`docs/03-design.md`](docs/03-design.md) | Thiết kế scoring model + portfolio |
+| [`docs/04-roadmap.md`](docs/04-roadmap.md) | Roadmap build MVP tuần 1–4 |
+| [`docs/05-business.md`](docs/05-business.md) | Kiếm tiền — ai trả, khi nào, ra sao |
+| [`docs/06-oss.md`](docs/06-oss.md) | Sổ tay vận hành OSS solo (rủi ro + lịch bảo trì) |
+| [`docs/07-decisions.md`](docs/07-decisions.md) | Kho quyết định + câu hỏi mở + checklist bàn giao |
+| [`docs/08-marketing.md`](docs/08-marketing.md) / [`08-marketing-en.md`](docs/08-marketing-en.md) | Kể chuyện + nguyên liệu marketing (explainer + câu chuyện user, VI/EN) |
 
 ---
 
@@ -58,7 +59,7 @@ Score (0-100) = 30%·MaintainerResponsiveness + 20%·RepoHealth + 15%·IssueFres
 - **RepoHealth 20%** — repo sống (hard filter: archived/không push > 90 ngày → loại).
 - **IssueFreshness 15%** — issue tươi (hard filter: mở > 180 ngày → loại).
 
-Chi tiết đầy đủ: [`thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md`](thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md)
+Chi tiết đầy đủ: [`docs/03-design.md`](docs/03-design.md)
 
 ---
 
@@ -71,7 +72,7 @@ Chi tiết đầy đủ: [`thiet-ke-scoring-va-portfolio-open-source-contributio
 | **3** | Mời 5–10 user thật + đo funnel + quyết định pivot/continue |
 | **4** | Portfolio v1 + OG image + badge |
 
-Chi tiết + decision gates: [`roadmap-mvp-open-source-contribution-finder.md`](roadmap-mvp-open-source-contribution-finder.md)
+Chi tiết + decision gates: [`docs/04-roadmap.md`](docs/04-roadmap.md)
 
 ---
 

@@ -130,4 +130,4 @@ FirstPR làm **3 việc** — đủ trọn hành trình:
 
 ## 10. Quyết định chưa chốt (cần chủ dự án)
 
-Xem `docs/03-decisions-handoff.md`. **Lưu ý:** mục tiêu dài hạn (trước đây là Q1) **đã chốt = C — Công cụ cộng đồng VN (OSS)** — xem `docs/04-oss-maintenance.md` §1. Mọi quyết định phía sau (business model, monetize timing) phải đọc theo định hướng này.
+Xem `07-decisions.md`. **Lưu ý:** mục tiêu dài hạn (trước đây là Q1) **đã chốt = C — Công cụ cộng đồng VN (OSS)** — xem `06-oss.md` §1. Mọi quyết định phía sau (business model, monetize timing) phải đọc theo định hướng này.

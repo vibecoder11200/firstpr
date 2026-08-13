@@ -2,7 +2,7 @@
 ## Open Source Contribution Finder cho junior Việt Nam
 
 > **Ngày:** 2026-08-13
-> **Trạng thái:** Thiết kế (design), chưa implement. Cơ sở: nghiên cứu trong `nghien-cuu-open-source-contribution-finder.md`.
+> **Trạng thái:** Thiết kế (design), chưa implement. Cơ sở: nghiên cứu trong `02-research.md`.
 > **Nguyên tắc cốt lõi:** "Chất lượng" = **xác suất PR đầu của newcomer được merge & được hỗ trợ** — không phải "issue hay".
 
 ---
@@ -51,7 +51,7 @@ Score (0-100) = 30%·MaintainerResponsiveness + 20%·RepoHealth + 15%·IssueFres
 |---|---|---|
 | `stargazers_count` | `> 1000 → 30` · `> 100 → 20` · `> 10 → 10` · còn lại 0 | 0–30 |
 | `license` | có đủ license | +20 |
-| README có `CONTRIBUTING.md` | có hướng dẫn đóng góp rõ | +25 |
+| README có `../CONTRIBUTING.md` | có hướng dẫn đóng góp rõ | +25 |
 | `has_issues` | `true` | +15 |
 | `open_issues_count` | hợp lý (không 0 cũng không quá tải) | +10 |
 

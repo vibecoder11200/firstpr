@@ -37,13 +37,14 @@
 
 | File | Content |
 |---|---|
-| [`nghien-cuu-open-source-contribution-finder.md`](nghien-cuu-open-source-contribution-finder.md) | Market research + feasibility + source verification |
-| [`thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md`](thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md) | Scoring model + portfolio design |
-| [`roadmap-mvp-open-source-contribution-finder.md`](roadmap-mvp-open-source-contribution-finder.md) | MVP build roadmap (weeks 1–4) |
-| [`docs/01-vision-strategy.md`](docs/01-vision-strategy.md) | Vision, problem, timing, personas, competitors, metrics, scope |
-| [`docs/02-business-model.md`](docs/02-business-model.md) | Monetization — who pays, when, how |
-| [`docs/03-decisions-handoff.md`](docs/03-decisions-handoff.md) | Decisions log + open questions + handoff checklist |
-| [`docs/04-oss-maintenance.md`](docs/04-oss-maintenance.md) | Solo-OSS operation playbook (risks, maintenance schedule) |
+| [`docs/01-vision.md`](docs/01-vision.md) | Vision, problem, timing, personas, competitors, metrics, scope |
+| [`docs/02-research.md`](docs/02-research.md) | Market research + feasibility + source verification |
+| [`docs/03-design.md`](docs/03-design.md) | Scoring model + portfolio design |
+| [`docs/04-roadmap.md`](docs/04-roadmap.md) | MVP build roadmap (weeks 1–4) |
+| [`docs/05-business.md`](docs/05-business.md) | Monetization — who pays, when, how |
+| [`docs/06-oss.md`](docs/06-oss.md) | Solo-OSS operation playbook (risks, maintenance schedule) |
+| [`docs/07-decisions.md`](docs/07-decisions.md) | Decisions log + open questions + handoff checklist |
+| [`docs/08-marketing.md`](docs/08-marketing.md) / [`08-marketing-en.md`](docs/08-marketing-en.md) | Story & marketing playbook (explainer + user stories, VI/EN) |
 
 ---
 
@@ -58,7 +59,7 @@ Score (0-100) = 30%·MaintainerResponsiveness + 20%·RepoHealth + 15%·IssueFres
 - **RepoHealth 20%** — repo is alive (hard filter: archived / no push > 90 days → drop).
 - **IssueFreshness 15%** — issue is fresh (hard filter: open > 180 days → drop).
 
-Full details: [`thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md`](thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md)
+Full details: [`docs/03-design.md`](docs/03-design.md)
 
 ---
 
@@ -71,7 +72,7 @@ Full details: [`thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md
 | **3** | 5–10 real users + funnel tracking + pivot/continue gate |
 | **4** | Portfolio v1 + OG image + badges |
 
-Full details + decision gates: [`roadmap-mvp-open-source-contribution-finder.md`](roadmap-mvp-open-source-contribution-finder.md)
+Full details + decision gates: [`docs/04-roadmap.md`](docs/04-roadmap.md)
 
 ---
 

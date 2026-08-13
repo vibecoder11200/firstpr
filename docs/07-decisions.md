@@ -12,14 +12,15 @@
 
 > Người kế nhiệm nên đọc theo đúng thứ tự này để hiểu hết, không cần hỏi lại chủ dự án.
 
-- [ ] **README.md** — bức tranh 1 trang (bắt đầu)
-- [ ] **docs/01-vision-strategy.md** — VÌ SAO (đọc trước)
-- [ ] **nghien-cuu-open-source-contribution-finder.md** — THỊ TRƯỜNG + feasibility + kiểm chứng nguồn
-- [ ] **thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md** — THIẾT KẾ scoring model + portfolio
-- [ ] **roadmap-mvp-open-source-contribution-finder.md** — LÀM GÌ tuần 1–4, có decision gates
-- [ ] **docs/02-business-model.md** — AI TRẢ TIỀN (sau validate)
-- [ ] **docs/03-decisions-handoff.md** (chính là file này) — QUYẾT ĐỊNH + câu hỏi mở
-- [ ] **docs/04-oss-maintenance.md** — VẬN HÀNH solo (rủi ro + sổ tay bảo trì)
+- [ ] **../README.md** — bức tranh 1 trang (bắt đầu)
+- [ ] **01-vision.md** — VÌ SAO (đọc trước)
+- [ ] **02-research.md** — THỊ TRƯỜNG + feasibility + kiểm chứng nguồn
+- [ ] **03-design.md** — THIẾT KẾ scoring model + portfolio
+- [ ] **04-roadmap.md** — LÀM GÌ tuần 1–4, có decision gates
+- [ ] **05-business.md** — AI TRẢ TIỀN (sau validate)
+- [ ] **06-oss.md** — VẬN HÀNH solo (rủi ro + sổ tay bảo trì)
+- [ ] **07-decisions.md** (chính là file này) — QUYẾT ĐỊNH + câu hỏi mở
+- [ ] **08-marketing.md** — KỂ CHUYỆN + nguyên liệu marketing (đọc sau cùng, không bắt buộc cho kế thừa)
 
 **Kiến thức cần nắm được sau khi đọc xong (tự kiểm tra):**
 1. Vấn đề là gì, FirstPR giải quyết bằng 3 thứ nào?
@@ -41,9 +42,9 @@
 | D3 | 2026-08-13 | **Trọng số Junior-first: 30/20/15/35 (responsiveness/repo/freshness/clarity)** | Khán giả là junior → clarity (hiểu việc) cao nhất. Repository "còn sống" tách làm hard filter (hết double-count với responsiveness). **Đã sửa lỗi normalization** (mỗi nhóm clamp 0–100 trước khi nhân trọng số) | Khi vòng phản hồi outcome cho trọng số thật (V2); đây là **priors** không phải sự thật |
 | D4 | 2026-08-13 | **MVP = 4 tuần, ship nhẹ, đo hành vi** | Triết lý: ship một thứ junior dùng được trong tuần 1; quyết định bằng hành vi người dùng thật, không bằng phân tích thêm | Mỗi gate G1/G2/G3 là cơ hội pivot |
 | D5 | 2026-08-13 | **Bản địa hoá VN làm khác biệt (persona An — junior VN)** | Phân khúc VN trống, VFOSSA + cộng đồng dev VN sẵn làm kênh; tool global không phớt lờ tiếng VN được | Khi mở rộng toàn cầu (V2 mở rộng ngôn ngữ) |
-| D7 | 2026-08-13 | **README song ngữ: `README.md` = EN chính + `README_Vi.md` = VI riêng** | Phục vụ cả community VN + global/tuyển dụng; giữ README chính bằng tiếng Anh cho reach rộng | Không — ổn định rồi |
+| D7 | 2026-08-13 | **README song ngữ: `../README.md` = EN chính + `../README_Vi.md` = VI riêng** | Phục vụ cả community VN + global/tuyển dụng; giữ README chính bằng tiếng Anh cho reach rộng | Không — ổn định rồi |
 | D8 | 2026-08-13 | **Branch mặc định `main`** | Convention GitHub hiện đại; xoá master cũ khi set default | Không |
-| D9 | 2026-08-13 | **Định vị: C — Công cụ cộng đồng VN (OSS, MIT, public)** | Khớp động lực "cùng dùng, cùng đóng góp" (Q1). A (portfolio) gộp vào C — build-in-public tự có. B (monetize) trì hoãn sau validate. Rủi ro + vận hành solo: `docs/04-oss-maintenance.md` | Khi có người dùng thật + dữ liệu outcome → cân nhắc B |
+| D9 | 2026-08-13 | **Định vị: C — Công cụ cộng đồng VN (OSS, MIT, public)** | Khớp động lực "cùng dùng, cùng đóng góp" (Q1). A (portfolio) gộp vào C — build-in-public tự có. B (monetize) trì hoãn sau validate. Rủi ro + vận hành solo: `06-oss.md` | Khi có người dùng thật + dữ liệu outcome → cân nhắc B |
 | D10 | 2026-08-13 | **Public repo + LICENSE MIT + CONTRIBUTING + 3 starter issues (dogfooding)** | Self-dogfooding = marketing không đối thủ nào dùng được; public để tự dùng + CV; repo tự gắn `good first issue` chứng minh sản phẩm | Không — nền tảng ổn định |
 
 ---
@@ -55,7 +56,7 @@
 | # | Câu hỏi | Ảnh hưởng tới | Độ khẩn | Ghi chú |
 |---|---|---|---|---|
 | ~~Q1~~ | ~~Mục tiêu dài hạn?~~ | — | — | ✅ **ĐÃ CHỐT → D9** (Công cụ cộng đồng VN) |
-| Q2 | Mô hình giá cụ thể (B2B recruit-export / sponsor)? | `02-business-model.md` Hướng A/B | 🟡 Sau validate | Chưa cần ở MVP |
+| Q2 | Mô hình giá cụ thể (B2B recruit-export / sponsor)? | `05-business.md` Hướng A/B | 🟡 Sau validate | Chưa cần ở MVP |
 | Q3 | Xác minh trend "GFI label suy giảm 2024" bằng dữ liệu thật? | Độ tin cậy của 1 luận cứ trong vision | 🟡 Thấp | 1 preprint, chưa peer-review; khuyến nghị tự scan GitHub nếu dùng làm luận cứ |
 | ~~Q4~~ | ~~Public repo khi nào?~~ | — | — | ✅ **ĐÃ CHỐT → D10** (đã public) |
 
@@ -78,7 +79,7 @@
 - [ ] Theo đúng roadmap 4 tuần + decision gates.
 
 **Trong quá trình:**
-- [ ] Cập nhật `docs/03-decisions-handoff.md` mỗi khi chốt quyết định mới.
+- [ ] Cập nhật `07-decisions.md` mỗi khi chốt quyết định mới.
 - [ ] Ghi lại bất kỳ thay đổi rationale nào (để không mất ngữ cảnh).
 
 ---

@@ -2,7 +2,7 @@
 ## Open Source Contribution Finder cho junior Việt Nam
 
 > **Ngày:** 2026-08-13
-> **Trạng thái:** Kế hoạch build. Cơ sở: `nghien-cuu-open-source-contribution-finder.md` (research) + `thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md` (design).
+> **Trạng thái:** Kế hoạch build. Cơ sở: `02-research.md` (research) + `03-design.md` (design).
 > **Triết lý MVP:** ship một cái gì đó **một junior thật sự dùng được trong tuần 1**, đo lường hành vi, rồi mới mở rộng. Không build full 3 tháng rồi mới hỏi ai cần.
 
 ---

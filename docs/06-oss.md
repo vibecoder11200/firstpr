@@ -46,7 +46,7 @@
 1. **Mỗi feature mới = thêm 1 gánh nặng.** Từ chối feature khi chưa tự dùng thấy cần. "No" là câu trả lời mặc định; "yes" cần lý do.
 2. **Solo build → phạm vi theo nhu cầu của chủ dự án** (tự dùng ít nhất 6 tháng). Đừng build theo feature request của người ngoài.
 3. **Đồng thuận tối thiểu cho MVP:** crawler + scoring v1 + trang kết quả. Portfolio/leaderboard là V2 — không ôm vào MVP.
-4. **Từ chối feature bằng cách ghi vào `docs/03-decisions-handoff.md`** (thêm dòng "không làm, vì…") để không phải giải thích lặp.
+4. **Từ chối feature bằng cách ghi vào `07-decisions.md`** (thêm dòng "không làm, vì…") để không phải giải thích lặp.
 
 ---
 
@@ -112,10 +112,10 @@
 
 ## 7. Checklist tái khởi động (nếu dự án bị bỏ giữa chừng, quay lại)
 
-- [ ] Đọc README + docs/index.md theo thứ tự.
+- [ ] Đọc README + index.md theo thứ tự.
 - [ ] Chạy lịch §4.2 trong 1 tháng, không mở rộng phạm vi.
 - [ ] Merge PR còn treo; đóng issue lỗi thời.
-- [ ] Cập nhật trạng thái docs (`index.md`, `03-decisions-handoff.md`).
+- [ ] Cập nhật trạng thái docs (`index.md`, `07-decisions.md`).
 - [ ] Chỉ mở rộng tính năng khi 1 user (chính mình) dùng đều đặn 4 tuần.
 
 ---
@@ -127,4 +127,4 @@
 | D9 | 2026-08-13 | **Định vị: C — Công cụ cộng đồng VN (OSS, MIT, public)** | Khớp động lực "cùng dùng, cùng đóng góp"; A gộp vào C; B trì hoãn sau validate | Khi có người dùng thật + dữ liệu outcome → cân nhắc B |
 | D10 | 2026-08-13 | **Public repo + LICENSE MIT + CONTRIBUTING + 3 starter issues (dogfooding)** | Self-dogfooding = marketing không đối thủ nào dùng được; public để tự dùng + CV | Không — nền tảng ổn định |
 
-**Bổ sung vào `docs/03-decisions-handoff.md`:** thay D6 (private) bằng D9/D10; đóng Q1 và Q4.
+**Bổ sung vào `07-decisions.md`:** thay D6 (private) bằng D9/D10; đóng Q1 và Q4.

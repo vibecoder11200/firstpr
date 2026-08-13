@@ -11,9 +11,9 @@ Guidance for Claude Code (claude.ai/code) and contributors working in this repos
 - **Status:** Concept + Design. Not yet implemented.
 - **Bilingual:** English is the working language; Vietnamese is the secondary content language. See `README.md` (EN) / `README_Vi.md` (VI).
 - **Key docs:**
-  - `nghien-cuu-open-source-contribution-finder.md` — market research + feasibility
-  - `thiet-ke-scoring-va-portfolio-open-source-contribution-finder.md` — scoring model + portfolio design
-  - `roadmap-mvp-open-source-contribution-finder.md` — MVP roadmap (weeks 1–4)
+  - `docs/02-research.md` — market research + feasibility
+  - `docs/03-design.md` — scoring model + portfolio design
+  - `docs/04-roadmap.md` — MVP roadmap (weeks 1–4)
 
 ---
 
