@@ -1,0 +1,15 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import "./lib/i18n";
+import { initPosthog, identifyAnonymous } from "./lib/posthog";
+import App from "./App";
+
+initPosthog();
+identifyAnonymous();
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);

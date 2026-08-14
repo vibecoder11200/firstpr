@@ -1,0 +1,56 @@
+{
+  "common": {
+    "appName": "FirstPR",
+    "tagline": "Find genuinely good issues for your first PR",
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "empty": "No issues match your filters yet — the crawler is still warming up."
+  },
+  "nav": {
+    "login": "Sign in with GitHub",
+    "logout": "Sign out",
+    "language": "Language"
+  },
+  "filters": {
+    "language": "Language",
+    "all": "All languages",
+    "sortBy": "Sort",
+    "sortScore": "Best match",
+    "sortFresh": "Newest"
+  },
+  "issueCard": {
+    "stars": "{{count}} stars",
+    "opens": "opened",
+    "viewBreakdown": "Why this score?",
+    "goodFirstIssue": "good first issue"
+  },
+  "scoreBreakdown": {
+    "title": "Why this score?",
+    "total": "Total score",
+    "confidence": "Confidence",
+    "showOriginal": "Show formula score",
+    "showAdjusted": "Show adjusted score",
+    "group": {
+      "maintainer": "Maintainer responsiveness",
+      "repoHealth": "Repo health",
+      "freshness": "Issue freshness",
+      "clarity": "Issue clarity"
+    },
+    "weight": "weight {{weight}}%"
+  },
+  "confidence": {
+    "high": "Strong signals — many recent samples",
+    "medium": "Moderate signals — some samples",
+    "low": "Low signals — fewer samples or stale metrics",
+    "lowSamples": "Not enough samples yet",
+    "stale": "Metrics are older than 30 days"
+  },
+  "session": {
+    "expired": "Your session expired. Please sign in again.",
+    "signIn": "Sign in"
+  },
+  "footer": {
+    "madeFor": "Made for junior developers entering open source"
+  }
+}

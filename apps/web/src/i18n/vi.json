@@ -1,0 +1,56 @@
+{
+  "common": {
+    "appName": "FirstPR",
+    "tagline": "Tìm issue chất lượng cho PR đầu tiên của bạn",
+    "loading": "Đang tải…",
+    "error": "Có lỗi xảy ra",
+    "retry": "Thử lại",
+    "empty": "Chưa có issue nào khớp bộ lọc — crawler đang khởi động."
+  },
+  "nav": {
+    "login": "Đăng nhập bằng GitHub",
+    "logout": "Đăng xuất",
+    "language": "Ngôn ngữ"
+  },
+  "filters": {
+    "language": "Ngôn ngữ",
+    "all": "Tất cả ngôn ngữ",
+    "sortBy": "Sắp xếp",
+    "sortScore": "Khớp nhất",
+    "sortFresh": "Mới nhất"
+  },
+  "issueCard": {
+    "stars": "{{count}} sao",
+    "opens": "mở",
+    "viewBreakdown": "Vì sao điểm này?",
+    "goodFirstIssue": "good first issue"
+  },
+  "scoreBreakdown": {
+    "title": "Vì sao điểm này?",
+    "total": "Điểm tổng",
+    "confidence": "Độ tin cậy",
+    "showOriginal": "Xem điểm theo công thức",
+    "showAdjusted": "Xem điểm đã điều chỉnh",
+    "group": {
+      "maintainer": "Phản hồi của maintainer",
+      "repoHealth": "Sức khỏe repo",
+      "freshness": "Độ mới của issue",
+      "clarity": "Độ rõ ràng của issue"
+    },
+    "weight": "trọng số {{weight}}%"
+  },
+  "confidence": {
+    "high": "Tín hiệu mạnh — nhiều mẫu gần đây",
+    "medium": "Tín hiệu vừa — có một số mẫu",
+    "low": "Tín hiệu thấp — ít mẫu hoặc metrics cũ",
+    "lowSamples": "Chưa đủ mẫu dữ liệu",
+    "stale": "Metrics cũ hơn 30 ngày"
+  },
+  "session": {
+    "expired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+    "signIn": "Đăng nhập"
+  },
+  "footer": {
+    "madeFor": "Xây cho junior developer bước vào open source"
+  }
+}

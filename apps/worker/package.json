@@ -1,0 +1,28 @@
+{
+  "name": "@firstpr/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@firstpr/db": "*",
+    "@firstpr/github": "*",
+    "@firstpr/scoring": "*",
+    "bullmq": "^6.1.1",
+    "dotenv": "^16.4.7",
+    "ioredis": "^5.4.2",
+    "octokit": "^5.0.5"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.10"
+  }
+}

@@ -1,0 +1,151 @@
+name: firstpr
+
+# ======================================================================
+# FirstPR — Docker Compose
+#
+# Local dev:  docker compose up                (api/worker/web on .env ports)
+# Production: docker compose --profile prod up (adds caddy + db-backup,
+#              uses PROD_? env vars defined in a prod-only .env)
+#
+# Data safety (HIGH-8):
+#   - postgres: named volume "pgdata" — survives container restarts
+#   - redis:    appendonly yes + named volume "redisdata" — queue survives
+#   - db-backup: weekly pg_dump to a separate named volume "backups"
+# ======================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-firstpr}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-firstpr}
+      POSTGRES_DB: ${POSTGRES_DB:-firstpr}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init-db/:/docker-entrypoint-initdb.d/:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-firstpr}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: [
+      "redis-server",
+      "--appendonly", "yes",
+      "--appendfsync", "everysec",
+      "--maxmemory", "128mb",
+      "--maxmemory-policy", "noeviction"
+    ]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Compose network: Postgres/Redis are services, not localhost.
+      DATABASE_URL: postgres://${POSTGRES_USER:-firstpr}:${POSTGRES_PASSWORD:-firstpr}@postgres:5432/${POSTGRES_DB:-firstpr}
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-4000}:4000"
+    profiles: ["", "prod"]
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/worker.Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Inside the compose network, Redis/Postgres are services, not localhost.
+      # Hardcoded service hostnames — do NOT interpolate from .env (local dev
+      # values like `redis://localhost` would break the container).
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgres://${POSTGRES_USER:-firstpr}:${POSTGRES_PASSWORD:-firstpr}@postgres:5432/${POSTGRES_DB:-firstpr}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles: ["", "prod"]
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "${WEB_PORT:-3000}:80"
+    profiles: ["", "prod"]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    profiles: ["prod"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+      - web
+    environment:
+      API_HOST: api:4000
+      WEB_HOST: web:80
+
+  db-backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    profiles: ["prod"]
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-firstpr}
+      PGHOST: postgres
+      PGDATABASE: ${POSTGRES_DB:-firstpr}
+      PGUSER: ${POSTGRES_USER:-firstpr}
+    volumes:
+      - backups:/backups
+      - ./scripts/backup.sh:/backup.sh:ro
+    entrypoint: >
+      /bin/sh -c '
+      chmod +x /backup.sh &&
+      echo "0 3 * * 0 /backup.sh" > /etc/crontabs/root &&
+      crond -f -l 2
+      '
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  redisdata:
+  caddy_data:
+  caddy_config:
+  backups:

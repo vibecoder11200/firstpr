@@ -21,6 +21,7 @@
 - [ ] **06-oss.md** — VẬN HÀNH solo (rủi ro + sổ tay bảo trì)
 - [ ] **07-decisions.md** (chính là file này) — QUYẾT ĐỊNH + câu hỏi mở
 - [ ] **08-marketing.md** — KỂ CHUYỆN + nguyên liệu marketing (đọc sau cùng, không bắt buộc cho kế thừa)
+- [ ] **09-techstack.md** — CHỐT KỸ THUẬT: stack + feasibility + C1 (đọc trước khi lập plan)
 
 **Kiến thức cần nắm được sau khi đọc xong (tự kiểm tra):**
 1. Vấn đề là gì, FirstPR giải quyết bằng 3 thứ nào?
@@ -46,6 +47,21 @@
 | D8 | 2026-08-13 | **Branch mặc định `main`** | Convention GitHub hiện đại; xoá master cũ khi set default | Không |
 | D9 | 2026-08-13 | **Định vị: C — Công cụ cộng đồng VN (OSS, MIT, public)** | Khớp động lực "cùng dùng, cùng đóng góp" (Q1). A (portfolio) gộp vào C — build-in-public tự có. B (monetize) trì hoãn sau validate. Rủi ro + vận hành solo: `06-oss.md` | Khi có người dùng thật + dữ liệu outcome → cân nhắc B |
 | D10 | 2026-08-13 | **Public repo + LICENSE MIT + CONTRIBUTING + 3 starter issues (dogfooding)** | Self-dogfooding = marketing không đối thủ nào dùng được; public để tự dùng + CV; repo tự gắn `good first issue` chứng minh sản phẩm | Không — nền tảng ổn định |
+| D11 | 2026-08-14 | **Tech stack: Fastify + Drizzle + Postgres + Redis/bullMQ (worker riêng) + Vite/React + Better Auth (GitHub OAuth) + VPS/Docker/Caddy + PostHog cloud + i18next + Vitest + @vercel/og** | Brainstorm (docs/09). Nhẹ + TS-native + chi phí thấp; worker riêng + Redis để scale crawl; cache Postgres giữ đúng design §1.7. Auth = Better Auth (Lucia đã deprecated 2025-03 → không dùng). | Khi scale thật (user > 1–5k): cân nhắc managed DB / queue cloud |
+
+Bổ sung cho D11 — acceptance criterion:
+- **C1 (rate-limit/cache):** đo khả năng cache từ data thật (mini-scan) TRƯỚC khi cam kết số repo/tháng → đưa thành mục trong plan. Cache tệ → vỡ 12.500 req/h.
+
+### Phase-01 build decisions (2026-08-14)
+
+| # | Ngày | Quyết định chốt | Rationale | Có thể thay đổi khi nào |
+|---|---|---|---|---|
+| D12 | 2026-08-14 | **Monorepo npm workspaces:** `apps/{api,worker,web}` + `packages/{db,scoring,github}` | Tách worker khỏi web ngay từ đầu (queue riêng, scale crawl); chia shared code (scoring, db, github client) qua packages để API + worker dùng chung; npm (không pnpm/yarn) — không thêm tool. | Khi scale lớn: tách repo / monorepo tool chuyên dụng |
+| D13 | 2026-08-14 | **Q1 đã chốt: GitHub OAuth scope = `read:user` + `user:email` (+ `public_repo`). KHÔNG `repo`.** **Q2 đã chốt: `encryptOAuthTokens: true` — accessToken encrypted at rest.** | `repo` scope quá rộng — leak blast radius lớn; `public_repo` đủ cho portfolio/outcome đọc public PR. Token encrypt at rest = C6 (token revoke vẫn không đọc được plaintext). | Khi cần đọc private repo của user (V2) — phải cân nhắc lại blast radius + review security |
+
+Đồng bộ với plan phase-01:
+- **C6 (secrets/encryption):** `.env.example` đã tạo + `.env` gitignored; `encryptOAuthTokens: true` trong `apps/api/src/lib/auth.ts`; Redis AOF + volumes trong compose; `scripts/backup.sh` (weekly pg_dump) + `scripts/restore.md` runbook.
+- **C1 (cache):** API `/api/issues` đọc Postgres cache duy nhất (không gọi GitHub); worker là nơi duy nhất crawl; `packages/github/rate-limiter.ts` token-bucket theo job (discover 30 req/min, repo-metrics 12.5k/h).
 
 ---
 

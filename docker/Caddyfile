@@ -1,0 +1,21 @@
+# FirstPR — Caddy configuration (production, auto-HTTPS)
+# Environment variables injected from compose: API_HOST, WEB_HOST
+
+{
+    email admin@firstpr.cc
+    # Keep memory low on a solo VPS
+    servers {
+        max_header_size 16384
+    }
+}
+
+{$APP_DOMAIN:-firstpr.cc} {
+    reverse_proxy {$WEB_HOST}
+    encode gzip
+}
+
+# API lives under a path on the same domain (Caddy routes /api/* to the API)
+{$API_DOMAIN:-api.firstpr.cc} {
+    reverse_proxy {$API_HOST}
+    encode gzip
+}

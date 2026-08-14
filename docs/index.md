@@ -20,6 +20,7 @@
 | 7 | [`06-oss.md`](06-oss.md) | **VẬN HÀNH** — định vị C (OSS), rủi ro, sổ tay solo |
 | 8 | [`07-decisions.md`](07-decisions.md) | **QUYẾT ĐỊNH** + câu hỏi mở + checklist bàn giao |
 | 9 | [`08-marketing.md`](08-marketing.md) | **KỂ CHUYỆN** — nguyên liệu marketing + câu chuyện Minh✅/Ngọc❌ (bản EN: [`08-marketing-en.md`](08-marketing-en.md)) |
+| 10 | [`09-techstack.md`](09-techstack.md) | **CHỐT KỸ THUẬT** — tech stack + feasibility sau brainstorm, input cho `ck:plan` |
 
 ---
 
@@ -34,6 +35,7 @@
 - **`06-oss.md`** — định vị công cụ cộng đồng VN (OSS): rủi ro solo + sổ tay vận hành.
 - **`07-decisions.md`** — kho quyết định (đã chốt + rationale), câu hỏi mở, checklist bàn giao, glossary.
 - **`08-marketing.md`** (VI) / **`08-marketing-en.md`** (EN) — nguyên liệu marketing: giải thích dễ hiểu + câu chuyện Minh✅/Ngọc❌ + bảng trước/sau + ideas kênh.
+- **`09-techstack.md`** — bản chốt kỹ thuật: stack đã chọn (Fastify/Drizzle/Postgres/Redis/bullMQ/VPS), feasibility, risk + acceptance criterion C1. **Đọc trước khi viết plan.**
 
 ---
 

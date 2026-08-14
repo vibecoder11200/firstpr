@@ -8,7 +8,7 @@ Guidance for Claude Code (claude.ai/code) and contributors working in this repos
 
 **FirstPR** — an open-source contribution finder that helps junior developers find genuinely good issues (scored by maintainer responsiveness, repo health, freshness, and clarity) and turn contributions into a job-seeking portfolio.
 
-- **Status:** Concept + Design. Not yet implemented.
+- **Status:** Phase-01 (foundation) implemented. Not yet in production.
 - **Bilingual:** English is the working language; Vietnamese is the secondary content language. See `README.md` (EN) / `README_Vi.md` (VI).
 - **Key docs:**
   - `docs/02-research.md` — market research + feasibility
@@ -80,3 +80,37 @@ The product will ship in **multiple languages**, and bilingual authoring (Englis
 6. **Translations live only in catalogs.** No translated content inside code, comments, or commit bodies.
 
 7. When the i18n framework is chosen (concept stage today), use its standard extraction and formatting helpers over bespoke string building.
+
+---
+
+## How to Run Locally (Phase-01)
+
+Monorepo: `apps/{api,worker,web}` (npm workspaces) + `packages/{db,scoring,github}`.
+
+```bash
+# 0. Install (first time)
+npm install
+
+# 1. Env — copy template & fill GitHub OAuth creds (required for auth/crawl)
+cp .env.example .env
+#   BETTER_AUTH_SECRET:  openssl rand -base64 32
+#   GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET: GitHub OAuth App
+#   GITHUB_TOKEN: PAT (dev) to enable the crawler
+
+# 2. Infra — Postgres + Redis (volumes persist, AOF on for Redis)
+docker compose up -d postgres redis
+
+# 3. Migrations (per-phase; idempotent)
+npm run db:migrate
+
+# 4. Run all three apps (api :4000, worker, web :3000)
+npm run dev
+
+# 5. Tests
+npm test
+```
+
+**Production compose:** `docker compose --profile prod up` (adds Caddy + db-backup).
+**Dev seed data:** `node --import tsx scripts/seed-dev.ts` (inserts sample issues for visual work).
+
+Rate-limit note (C1): the API only reads Postgres; crawling happens in the worker and goes through `packages/github/rate-limiter.ts` (Search 30 req/min, REST 12.5k/h). Never add live GitHub calls to API routes.

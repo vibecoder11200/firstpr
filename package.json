@@ -1,0 +1,27 @@
+{
+  "name": "firstpr",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Find genuinely good open-source issues for your first PR — and build a job-seeking portfolio from it.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,worker,web -c blue,magenta,green \"npm run dev -w @firstpr/api\" \"npm run dev -w @firstpr/worker\" \"npm run dev -w @firstpr/web\"",
+    "build": "npm run build -w @firstpr/api && npm run build -w @firstpr/worker && npm run build -w @firstpr/web",
+    "test": "npm run test -w @firstpr/api && npm run test -w @firstpr/scoring",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:generate": "npm run db:generate -w @firstpr/db",
+    "db:migrate": "npm run db:migrate -w @firstpr/db",
+    "db:push": "npm run db:push -w @firstpr/db"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  }
+}
