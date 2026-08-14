@@ -72,7 +72,7 @@ async function grade(): Promise<Graded[]> {
       ),
     )
     .orderBy(desc(scores.total))
-    .limit(Math.max(1, count * 3)); // oversample, dedupe to `count` below;
+    .limit(Math.max(1, count * 8)); // oversample, dedupe to `count` below
 
   const graded: Graded[] = [];
   const seenRepos = new Set<string>();

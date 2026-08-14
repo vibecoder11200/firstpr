@@ -1,7 +1,7 @@
 ---
 phase: 2
 title: "Scoring sắc + breakdown UI + cache"
-status: DONE (2026-08-14, G1 pending)
+status: DONE_CODE, G1 FAIL — recalibrate scoring
 priority: P1
 dependencies: [phase-01]
 ---
@@ -108,7 +108,7 @@ Nhiều hạng mục phase-02 đã được build sẵn trong phase-01 (confiden
 - **Tests:** + confidence tests (7), bot-owner tests, API detail weights/displayedScore test, bot hard-filter test.
 
 **Còn lại (cần data thật + human):**
-- **G1 gate:** chạy calibrate với 20 issues THẬT (cần crawler chạy với `GITHUB_TOKEN` + repo_metrics data) → quyết định pass/fail ≥ 80%. Kết quả ghi vào `07-decisions.md`.
+- ~~**G1 gate:** chạy calibrate với 20 issues THẬT → quyết định ≥ 80%~~ → **ĐÃ CHẠY (2026-08-15): 45% — FAIL.** Chi tiết + hướng recalibrate ở `07-decisions.md` D16. Phải đào lại scoring trước, KHÔNG mở rộng (theo roadmap).
 - **Hard-filter validation table:** trước/sau filter (180d, no-assignee) với data thật.
 - **Deploy + demo** với user thật (phase-03).
 

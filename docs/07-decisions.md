@@ -69,6 +69,14 @@ Bổ sung cho D11 — acceptance criterion:
 |---|---|---|---|---|
 | D14 | 2026-08-14 | **Confidence hiển thị giảm weight (Q4):** score hiển thị = công thức × 1.0/0.9/0.7 theo High/Med/Low; toggle "score gốc theo công thức" trên breakdown. Rule implement `packages/scoring/src/confidence.ts`, mirror ở API + UI. | Khi tín hiệu thiếu/cũ → đừng chê/bốc issue bằng score "ảo". Giảm weight là hành động thật (anti-gaming), không chỉ decorate. Người dùng vẫn thấy breakdown + score gốc (không black-box). | Sau G1 calibrate nếu score gốc tốt ở mọi confidence → cân nhắc chỉ decorate. Quyết định bằng data, ghi vào `03-design.md`. |
 | D15 | 2026-08-14 | **Bot-owned repo bị hard-filter (anti-gaming):** `isBotOwner()` = `type:"Bot"` hoặc login kết thúc `[bot]`; persist `repos.is_bot_owned`; hard filter `repo_bot_owned` trong scoring. Migration 0001. | Repo bot mass-mine label GFI bằng scripts → issue rác, độc hại với junior. `[bot]` suffix là convention GitHub rõ ràng, không false-positive login người thật. | Khi có dữ liệu thật cho thấy bỏ sót/kill nhầm repo chất lượng → calibrate lại. |
+| D16 | 2026-08-15 | **G1 gate: FAIL 45% (cần ≥80%)** — recalibrate scoring, KHÔNG mở rộng. Đánh giá (AI-proxy: Claude grade 20 issues thật, cần xác nhận chủ dự án): model **over-score bài phức tạp** (forge-kernels 17-param kernel Δ−37, CONTINUUM state-machine Δ−27, ThePerson `birth()` Δ−20) và **under-score task docs/an toàn cho beginner** (retinue Δ+28, localmem Δ+26, GCode Δ+24). Root cause: **Clarity 35% đọc body length, không đọc độ khó/nhận biết "safe-zone"**. | G1 là cổng "đủ tốt để thử". Chỉ pass khi score khớp thủ công ≥80% trên 20 issues THẬT (do chủ dự án grade). |
+
+**Kết quả calibrate chi tiết (G1, 2026-08-15)** — 20 issues thật, grade bởi Claude (proxy):
+- Agreement raw ±10: **9/20 = 45%** · Displayed: 7/20 = 35% → **FAIL**
+- Hai lỗi hệ thống rõ:
+  1. **Doc/kernel complexity không phân giải:** body dài & có repro → 92 cho cả tutorial notebook, state-validator bug, `birth()` method, doc hardware tiers — không phân biệt junior-fit. Trusted B/C (repo health 20%) gần như hằng số với repo có metrics → toàn bộ trọng số dồn vào Clarity (body length).
+  2. **"Safe-zone"/docs-only không được thưởng:** issue gắn cờ "safe zone: docs only, no core risk" (retinue, localmem, GCode) bị 62 dù lý tưởng cho junior.
+- **Hướng recalibrate (đề xuất, chờ chủ dự án):** thêm tín hiệu **task complexity / beginner-fit** trong Clarity — gắn cờ từ khoá (docs, tutorial, safe-zone, first-timers-only) + phạt pattern phức tạp (nhiều positional param, kernel/state-machine internals); cân nhắc hạ trọng số clearness còn nếu body dài nhưng task khó.
 
 ---
 

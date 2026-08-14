@@ -87,6 +87,8 @@ Score (0-100) = 30%·MaintainerResponsiveness + 20%·RepoHealth + 15%·IssueFres
 
 **Điểm chiến lược quan trọng:** label beginner chỉ là **bonus +10, không bắt buộc** (bỏ khỏi yêu cầu tối thiểu). Đây chính là chỗ khác biệt với goodfirstissue.dev (vốn tin tưởng label tuyệt đối). Dựa theo FSE 2020 + cảnh báo trend label yếu → thiết kế **không phụ thuộc 1 label**.
 
+> **⚠️ G1 FAIL (2026-08-15) — Clarity hiện tại đọc body-length, không đọc độ khó:** calibrate 20 issues thật cho 45% agreement. Model chấm 92 cho cả tutorial notebook, state-machine bug, và method `birth()` (dễ) vì body dài + có repro → không phân giải **task complexity / junior-fit**. Đồng thời không thưởng "safe-zone: docs-only" (retinue/localmem/GCode) dù lý tưởng cho junior. **Recalibrate bắt buộc trước khi mở rộng:** thêm tín hiệu beginner-fit (từ khoá docs/safe-zone/first-timers-only, phạt pattern phức tạp như nhiều positional params, kernel/state-machine internals). Chi tiết: `07-decisions.md` D16.
+
 ### 1.6 Chống game hóa (anti-gaming) — trụ cột tin cậy
 
 - **Loại PR** (field `pull_request`), loại issue đã đóng, loại repo bot-only.
