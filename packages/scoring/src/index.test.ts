@@ -32,7 +32,7 @@ describe("scoring — clarity", () => {
 
 describe("computeScore — full pipeline", () => {
   const base = {
-    repo: { archived: false, pushedAt: new Date(), stargazersCount: 500 },
+    repo: { archived: false, isBotOwned: false, pushedAt: new Date(), stargazersCount: 500 },
     issue: {
       body: "Detailed repro steps and acceptance criteria for the fix.",
       state: "open" as const,
@@ -84,6 +84,22 @@ describe("computeScore — full pipeline", () => {
       },
     });
     expect(r.excludedReasons).toContain("is_pr");
+  });
+
+  it("hard-filters a bot-owned repo (anti-gaming)", () => {
+    const r = computeScore({
+      ...base,
+      repo: { ...base.repo, isBotOwned: true },
+      repoMetrics: {
+        sampleCount: 40,
+        medianFirstResponseHours: 16,
+        mergeRate90d: 85,
+        computedAt: new Date(),
+      },
+    });
+    expect(r.excluded).toBe(true);
+    expect(r.excludedReasons).toContain("repo_bot_owned");
+    expect(r.score).toBe(0);
   });
 
   it("low confidence when few samples", () => {

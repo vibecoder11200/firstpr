@@ -28,3 +28,34 @@ export function confidenceReason(
   }
   return "confidence.medium";
 }
+
+/**
+ * Display score after the confidence adjustment (Q4): the persisted composite
+ * `total` scaled by the confidence factor. Single source used by API + UI so
+ * the card, the drawer, and the detail endpoint always agree.
+ */
+export function displayedScore(
+  total: number | null | undefined,
+  confidence: "low" | "medium" | "high",
+): number {
+  if (total == null) return 0;
+  return Math.round(total * confidenceFactor(confidence));
+}
+
+/**
+ * Display weights as whole percentages, derived from the scoring config so the
+ * UI never hardcodes the 30/20/15/35 split. Single source for both routes.
+ */
+export function displayWeights(): {
+  maintainer: number;
+  repoHealth: number;
+  freshness: number;
+  clarity: number;
+} {
+  return {
+    maintainer: Math.round(DEFAULT_CONFIG.weights.maintainer * 100),
+    repoHealth: Math.round(DEFAULT_CONFIG.weights.repoHealth * 100),
+    freshness: Math.round(DEFAULT_CONFIG.weights.freshness * 100),
+    clarity: Math.round(DEFAULT_CONFIG.weights.clarity * 100),
+  };
+}

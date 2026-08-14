@@ -54,6 +54,7 @@ export async function scoreComputeJob(data: ScoreJobData): Promise<void> {
           : null,
         repo: {
           archived: repo.archived,
+          isBotOwned: repo.isBotOwned,
           pushedAt: repo.pushedAt,
           stargazersCount: repo.stargazersCount,
         },
@@ -91,6 +92,10 @@ async function upsertScore(issueId: number, result: ReturnType<typeof computeSco
     .values({
       issueId,
       total: result.score,
+      // Persist the confidence-adjusted score computed from the UNROUNDED raw
+      // composite, so API reads back the exact value the engine produced
+      // (no double-rounding vs the stored `total`). (review finding #1)
+      displayedScore: result.displayedScore,
       scoreMaintainer: result.maintainerResponsiveness,
       scoreRepoHealth: result.repoHealth,
       scoreIssueFreshness: result.issueFreshness,

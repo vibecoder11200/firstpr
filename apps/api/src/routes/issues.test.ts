@@ -25,7 +25,7 @@ beforeAll(async () => {
     createdAt: new Date(), updatedAt: new Date(), stale: true,
   }).onConflictDoNothing();
   const s = await db.insert(scores).values({
-    issueId: 900001, total: 77, scoreMaintainer: 70, scoreRepoHealth: 80,
+    issueId: 900001, total: 77, displayedScore: 69, scoreMaintainer: 70, scoreRepoHealth: 80,
     scoreIssueFreshness: 90, scoreIssueClarity: 70, confidence: "medium",
   }).returning({ id: scores.id }).onConflictDoNothing();
   if (s[0]) await db.update(issues).set({ scoreId: s[0]!.id, stale: false }).where(eq(issues.id, 900001));
@@ -56,5 +56,21 @@ describe("GET /api/issues/:id", () => {
   it("returns 404 for missing issue", async () => {
     const res = await app.inject({ method: "GET", url: "/api/issues/999999" });
     expect(res.statusCode).toBe(404);
+  });
+
+  it("returns the breakdown with weights + displayedScore", async () => {
+    const res = await app.inject({ method: "GET", url: "/api/issues/900001" });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.score.displayedScore).toBeDefined();
+    expect(body.score.weights).toMatchObject({
+      maintainer: 30,
+      repoHealth: 20,
+      freshness: 15,
+      clarity: 35,
+    });
+    expect(body.score.confidence).toBe("medium");
+    // displayedScore is persisted at write time (not recomputed from rounded total)
+    expect(body.score.displayedScore).toBe(69);
   });
 });

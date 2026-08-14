@@ -36,7 +36,7 @@ export default function App() {
 
   const openBreakdown = (issue: ApiIssue) => {
     setActive(issue);
-    track("issue_view", { language, score_band: band(issue.score) });
+    track("issue_view", { language, score_band: band(issue.displayedScore) });
   };
 
   const selectLang = (l: string) => {

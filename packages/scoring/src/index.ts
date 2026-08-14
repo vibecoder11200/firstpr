@@ -27,6 +27,7 @@ export interface ScoreInput {
   /** repo-level flags */
   repo: {
     archived: boolean;
+    isBotOwned: boolean;
     pushedAt: Date | null;
     stargazersCount: number;
   };
@@ -143,6 +144,7 @@ export function hardFilters(
 ): { excluded: boolean; reasons: string[] } {
   const reasons: string[] = [];
   if (input.repo.archived) reasons.push("repo_archived");
+  if (input.repo.isBotOwned) reasons.push("repo_bot_owned");
   if (input.issue.state !== "open") reasons.push("issue_closed");
   if (input.issue.pullRequestId != null) reasons.push("is_pr");
   if (!input.issue.body || input.issue.body.trim().length === 0) reasons.push("empty_body");
@@ -167,6 +169,14 @@ export function computeConfidence(
 }
 
 /** Composite score; returns 0 for filtered issues plus full breakdown. */
+export {
+  confidenceFactor,
+  confidenceReason,
+  confidenceLabel,
+  displayedScore,
+  displayWeights,
+} from "./confidence.js";
+
 export function computeScore(
   input: ScoreInput,
   cfg: ScoringConfig = DEFAULT_CONFIG,

@@ -8,8 +8,6 @@ interface Props {
   onClose: () => void;
 }
 
-const WEIGHTS = { maintainer: 30, repoHealth: 20, freshness: 15, clarity: 35 };
-
 function Bar({
   label,
   value,
@@ -45,11 +43,11 @@ export default function ScoreBreakdown({ issue, onClose }: Props) {
   const { t } = useTranslation();
   const [showOriginal, setShowOriginal] = useState(false);
   const b = issue.scoreBreakdown;
+  const w = issue.weights;
 
-  // Confidence adjustment mirrors the server (Q4): high=1, medium=0.9, low=0.7
-  const confFactor = issue.confidence === "high" ? 1 : issue.confidence === "medium" ? 0.9 : 0.7;
-  const adjusted = Math.round(issue.score * confFactor);
-  const shown = showOriginal ? issue.score : adjusted;
+  // Confidence adjustment mirrors the server (Q4): the API already computed
+  // displayedScore (high=1, medium=0.9, low=0.7); the raw formula is `score`.
+  const shown = showOriginal ? issue.score : issue.displayedScore;
 
   return (
     <div
@@ -85,10 +83,10 @@ export default function ScoreBreakdown({ issue, onClose }: Props) {
           </div>
         </div>
 
-        <Bar label={t("scoreBreakdown.group.maintainer")} value={b.maintainer} weight={WEIGHTS.maintainer} color="#60a5fa" />
-        <Bar label={t("scoreBreakdown.group.repoHealth")} value={b.repoHealth} weight={WEIGHTS.repoHealth} color="#34d399" />
-        <Bar label={t("scoreBreakdown.group.freshness")} value={b.freshness} weight={WEIGHTS.freshness} color="#fbbf24" />
-        <Bar label={t("scoreBreakdown.group.clarity")} value={b.clarity} weight={WEIGHTS.clarity} color="#c084fc" />
+        <Bar label={t("scoreBreakdown.group.maintainer")} value={b.maintainer} weight={w.maintainer} color="#60a5fa" />
+        <Bar label={t("scoreBreakdown.group.repoHealth")} value={b.repoHealth} weight={w.repoHealth} color="#34d399" />
+        <Bar label={t("scoreBreakdown.group.freshness")} value={b.freshness} weight={w.freshness} color="#fbbf24" />
+        <Bar label={t("scoreBreakdown.group.clarity")} value={b.clarity} weight={w.clarity} color="#c084fc" />
       </div>
     </div>
   );

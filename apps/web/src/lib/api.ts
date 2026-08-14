@@ -8,6 +8,7 @@ export interface ApiIssue {
   stars: number;
   createdAt: string;
   score: number;
+  displayedScore: number;
   scoreBreakdown: {
     maintainer: number | null;
     repoHealth: number | null;
@@ -15,6 +16,12 @@ export interface ApiIssue {
     clarity: number | null;
   };
   confidence: string;
+  weights: {
+    maintainer: number;
+    repoHealth: number;
+    freshness: number;
+    clarity: number;
+  };
 }
 
 export interface IssueListResponse {

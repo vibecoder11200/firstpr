@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { desc, eq, and, sql } from "drizzle-orm";
 import { issues, scores, repos } from "@firstpr/db";
+import { displayWeights } from "@firstpr/scoring";
 import { db } from "../lib/auth.js";
 
 /**
@@ -25,6 +26,7 @@ export async function issuesRoutes(app: FastifyInstance) {
       eq(issues.state, "open"),
       eq(issues.stale, false), // only freshly-scored issues (CRIT-2)
       sql`${issues.pullRequestId} IS NULL`, // anti-gaming: not a PR
+      eq(repos.isBotOwned, false), // anti-gaming: not a bot-owned repo
       // H3: exclude hard-filtered rows (archived repo, empty body, stale repo,
       // too-old issue) — they have a score row with total=0 / non-empty filters.
       sql`${scores.total} > 0`,
@@ -50,6 +52,7 @@ export async function issuesRoutes(app: FastifyInstance) {
         repoOwner: repos.owner,
         repoName: repos.name,
         total: scores.total,
+        displayedScore: scores.displayedScore,
         scoreMaintainer: scores.scoreMaintainer,
         scoreRepoHealth: scores.scoreRepoHealth,
         scoreIssueFreshness: scores.scoreIssueFreshness,
@@ -83,6 +86,7 @@ export async function issuesRoutes(app: FastifyInstance) {
         stars: r.stargazersCount,
         createdAt: r.createdAt,
         score: r.total ?? 0,
+        displayedScore: r.displayedScore ?? 0,
         scoreBreakdown: {
           maintainer: r.scoreMaintainer,
           repoHealth: r.scoreRepoHealth,
@@ -90,6 +94,7 @@ export async function issuesRoutes(app: FastifyInstance) {
           clarity: r.scoreIssueClarity,
         },
         confidence: r.confidence,
+        weights: displayWeights(),
       })),
       page,
       pageSize,

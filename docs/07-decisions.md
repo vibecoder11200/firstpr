@@ -63,6 +63,13 @@ Bổ sung cho D11 — acceptance criterion:
 - **C6 (secrets/encryption):** `.env.example` đã tạo + `.env` gitignored; `encryptOAuthTokens: true` trong `apps/api/src/lib/auth.ts`; Redis AOF + volumes trong compose; `scripts/backup.sh` (weekly pg_dump) + `scripts/restore.md` runbook.
 - **C1 (cache):** API `/api/issues` đọc Postgres cache duy nhất (không gọi GitHub); worker là nơi duy nhất crawl; `packages/github/rate-limiter.ts` token-bucket theo job (discover 30 req/min, repo-metrics 12.5k/h).
 
+### Phase-02 build decisions (2026-08-14)
+
+| # | Ngày | Quyết định chốt | Rationale | Có thể thay đổi khi nào |
+|---|---|---|---|---|
+| D14 | 2026-08-14 | **Confidence hiển thị giảm weight (Q4):** score hiển thị = công thức × 1.0/0.9/0.7 theo High/Med/Low; toggle "score gốc theo công thức" trên breakdown. Rule implement `packages/scoring/src/confidence.ts`, mirror ở API + UI. | Khi tín hiệu thiếu/cũ → đừng chê/bốc issue bằng score "ảo". Giảm weight là hành động thật (anti-gaming), không chỉ decorate. Người dùng vẫn thấy breakdown + score gốc (không black-box). | Sau G1 calibrate nếu score gốc tốt ở mọi confidence → cân nhắc chỉ decorate. Quyết định bằng data, ghi vào `03-design.md`. |
+| D15 | 2026-08-14 | **Bot-owned repo bị hard-filter (anti-gaming):** `isBotOwner()` = `type:"Bot"` hoặc login kết thúc `[bot]`; persist `repos.is_bot_owned`; hard filter `repo_bot_owned` trong scoring. Migration 0001. | Repo bot mass-mine label GFI bằng scripts → issue rác, độc hại với junior. `[bot]` suffix là convention GitHub rõ ràng, không false-positive login người thật. | Khi có dữ liệu thật cho thấy bỏ sót/kill nhầm repo chất lượng → calibrate lại. |
+
 ---
 
 ## 3. Open Questions — câu hỏi CHƯA đóng (cần chủ dự án)

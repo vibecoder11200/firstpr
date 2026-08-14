@@ -23,9 +23,9 @@ async function seed() {
   ]).onConflictDoNothing();
 
   const s1 = await db.insert(scores).values([
-    { issueId: 101, total: 82, scoreMaintainer: 78, scoreRepoHealth: 90, scoreIssueFreshness: 85, scoreIssueClarity: 92, confidence: "high", recomputedAt: new Date(), computedAt: new Date() },
-    { issueId: 102, total: 74, scoreMaintainer: 70, scoreRepoHealth: 85, scoreIssueFreshness: 90, scoreIssueClarity: 70, confidence: "high", recomputedAt: new Date(), computedAt: new Date() },
-    { issueId: 103, total: 88, scoreMaintainer: 90, scoreRepoHealth: 80, scoreIssueFreshness: 88, scoreIssueClarity: 95, confidence: "high", recomputedAt: new Date(), computedAt: new Date() },
+    { issueId: 101, total: 82, displayedScore: 82, scoreMaintainer: 78, scoreRepoHealth: 90, scoreIssueFreshness: 85, scoreIssueClarity: 92, confidence: "high", recomputedAt: new Date(), computedAt: new Date() },
+    { issueId: 102, total: 74, displayedScore: 74, scoreMaintainer: 70, scoreRepoHealth: 85, scoreIssueFreshness: 90, scoreIssueClarity: 70, confidence: "high", recomputedAt: new Date(), computedAt: new Date() },
+    { issueId: 103, total: 88, displayedScore: 88, scoreMaintainer: 90, scoreRepoHealth: 80, scoreIssueFreshness: 88, scoreIssueClarity: 95, confidence: "high", recomputedAt: new Date(), computedAt: new Date() },
   ]).returning({ id: scores.id, issueId: scores.issueId }).onConflictDoNothing();
 
   for (const s of s1) {

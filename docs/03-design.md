@@ -90,9 +90,26 @@ Score (0-100) = 30%·MaintainerResponsiveness + 20%·RepoHealth + 15%·IssueFres
 ### 1.6 Chống game hóa (anti-gaming) — trụ cột tin cậy
 
 - **Loại PR** (field `pull_request`), loại issue đã đóng, loại repo bot-only.
-- **Confidence score** (0-100): thể hiện độ đầy đủ tín hiệu. Nếu repo signals cache cũ/hụt → giảm weight, hiển thị "chưa đủ dữ liệu".
+- **Confidence score (0-100)**: thể hiện độ đầy đủ tín hiệu. Nếu repo signals cache cũ/hụt → giảm weight, hiển thị "chưa đủ dữ liệu".
 - **Hiển thị breakdown per-criterion** cho từng issue: junior hiểu *vì sao* — vừa giáo dục vừa xây trust (đối nghịch với scoring black-box).
 - **Anti self-star / fork-only** khi xây portfolio (xem Phần 2).
+
+#### Confidence semantics (Q4 — đã chốt, MED-14)
+
+| Level | Điều kiện | Điểm hiển thị |
+|---|---|---|
+| **High** | `sample_count ≥ 30` **và** `repo_metrics.computed_at` mới (≤ 30 ngày) | giữ nguyên score công thức |
+| **Medium** | `sample_count` 10–29 | **giảm weight 0.9** (score hiển thị = 90% công thức) |
+| **Low** | `sample_count < 10` **hoặc** metrics cũ > 30 ngày | **giảm weight 0.7** |
+
+- Confidence KHÔNG chỉ decorate: khi không phải High, score hiển thị bị giảm weight (0.9/0.7) — nhưng vẫn hiển thị đầy đủ breakdown + nút toggle "score gốc theo công thức". Không bí mật, không black-box.
+- Rule được implement trong `packages/scoring/src/confidence.ts` (factor + reason) và mirror ở API + UI.
+
+#### Bot-only repo (anti-gaming, phase-02)
+
+- Repo sở hữu bởi GitHub **Bot account** bị **hard-filter**: `type: "Bot"` hoặc login kết thúc `[bot]` (dependabot[bot], renovate[bot], github-actions[bot]) → `hardFilters` chứa `repo_bot_owned`, score 0, không vào danh sách.
+- Lý do: repo bot mass-mine label `good first issue` bằng scripts, tạo issue rác — độc hại nhất với junior.
+- Implement: `packages/github/src/sanitize.ts` `isBotOwner()`, detect tại crawler (`discover`), persist `repos.is_bot_owned`, hard-filter trong scoring.
 
 ### 1.7 Tính khả thi dưới rate limit (số cụ thể)
 

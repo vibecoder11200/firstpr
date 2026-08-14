@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "concurrently -n api,worker,web -c blue,magenta,green \"npm run dev -w @firstpr/api\" \"npm run dev -w @firstpr/worker\" \"npm run dev -w @firstpr/web\"",
     "build": "npm run build -w @firstpr/api && npm run build -w @firstpr/worker && npm run build -w @firstpr/web",
-    "test": "npm run test -w @firstpr/api && npm run test -w @firstpr/scoring",
+    "test": "npm run test -w @firstpr/api && npm run test -w @firstpr/github && npm run test -w @firstpr/scoring && npm run test -w @firstpr/web",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "db:generate": "npm run db:generate -w @firstpr/db",
     "db:migrate": "npm run db:migrate -w @firstpr/db",

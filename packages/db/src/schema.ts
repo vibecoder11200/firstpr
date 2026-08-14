@@ -113,6 +113,8 @@ export const repos = pgTable(
     language: text("language"),
     /** true = archived → hard-filtered out of results */
     archived: boolean("archived").notNull().default(false),
+    /** true = owned by a GitHub Bot account → hard-filtered (anti-gaming) */
+    isBotOwned: boolean("is_bot_owned").notNull().default(false),
     /** last push date (drives the 90-day health hard filter) */
     pushedAt: timestamp("pushed_at", { withTimezone: true }),
     fork: boolean("fork").notNull().default(false),
@@ -145,7 +147,11 @@ export const repoMetrics = pgTable(
   /** when these metrics were computed */
   computedAt: timestamp("computed_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [uniqueIndex("repo_metrics_repo_id_uq").on(t.repoId)],
+  (t) => [
+    uniqueIndex("repo_metrics_repo_id_uq").on(t.repoId),
+    // staleness lookups (confidence: metrics older than maxAgeDays) sort by this
+    index("repo_metrics_computed_at_idx").on(t.computedAt),
+  ],
 );
 
 /* ------------------------------ issues --------------------------- */
@@ -201,8 +207,12 @@ export const scores = pgTable(
     issueId: integer("issue_id")
       .notNull()
       .references(() => issues.id, { onDelete: "cascade" }),
-    /** 0–100 composite */
+    /** 0–100 composite (raw formula, confidence NOT applied) */
     total: integer("total").notNull(),
+    /** 0–100 displayed score after confidence adjustment (Q4) — stored at
+     *  write time so scoring, API, and UI agree exactly (no double-rounding
+     *  from reading back the already-rounded `total`). */
+    displayedScore: integer("displayed_score").notNull().default(0),
     /** sub-scores, one per scoring group */
     scoreMaintainer: integer("score_maintainer"),
     scoreRepoHealth: integer("score_repo_health"),

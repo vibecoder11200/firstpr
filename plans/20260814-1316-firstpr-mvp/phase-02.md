@@ -1,7 +1,7 @@
 ---
 phase: 2
 title: "Scoring sắc + breakdown UI + cache"
-status: pending
+status: DONE (2026-08-14, G1 pending)
 priority: P1
 dependencies: [phase-01]
 ---
@@ -95,3 +95,36 @@ UI card → score chip → click → drawer/modal breakdown
 - Integration: `/api/issues/:id` breakdown JSON đúng (score điều chỉnh + gốc); filter anti-gaming; re-score `stale` flag.
 - UI: Playwright screenshot card + breakdown (dark theme, mobile 375px); toggle gốc/điều chỉnh hoạt động.
 - G1: chạy `scripts/calibrate.ts`, ghi kết quả → gate decision.
+
+## Implementation notes (2026-08-14)
+
+Nhiều hạng mục phase-02 đã được build sẵn trong phase-01 (confidence module + Q4 rule + score-adjustment, re-score stale, breakdown UI, i18n en/vi). Việc còn lại trong phase-02:
+
+- **Bot-only repo anti-gaming (D15):** `isBotOwner()` trong `packages/github/sanitize.ts` (`type:"Bot"` hoặc login `[bot]` suffix); detect + persist `repos.is_bot_owned` trong crawler; hard filter `repo_bot_owned` trong scoring; API list loại repo bot. Migration `0001_empty_riptide` (is_bot_owned + `repo_metrics.computed_at` index).
+- **Confidence-adjusted score là mặc định hiển thị (Q4):** `displayedScore` trả từ API list + detail (giữ `score` = công thức gốc); IssueCard + ScoreChip hiện `displayedScore`; ScoreBreakdown dùng `displayedScore`, toggle về `score` gốc.
+- **Weights source-of-truth từ API:** `issues.ts` + `issue-detail.ts` trả `weights` từ `DEFAULT_CONFIG`; UI bỏ hardcode `WEIGHTS` const.
+- **`scripts/calibrate.ts`:** tool calibrate G1 (grade N issues, so model ±10 = match, in ra agreement % + diff table). Chạy: `node --import tsx scripts/calibrate.ts --count 20`. Hỗ trợ interactive + piped input.
+- **`displayed_score` persisted (fix double-rounding):** migration 0002 thêm `scores.displayed_score`; `score-compute` persist `ScoreResult.displayedScore` (tính từ raw chưa round); API list + detail đọc stored value — scoring/API/UI khớp tuyệt đối, không còn ±1. `displayedScore()` + `displayWeights()` helper trong `packages/scoring/confidence.ts` (single source).
+- **Tests:** + confidence tests (7), bot-owner tests, API detail weights/displayedScore test, bot hard-filter test.
+
+**Còn lại (cần data thật + human):**
+- **G1 gate:** chạy calibrate với 20 issues THẬT (cần crawler chạy với `GITHUB_TOKEN` + repo_metrics data) → quyết định pass/fail ≥ 80%. Kết quả ghi vào `07-decisions.md`.
+- **Hard-filter validation table:** trước/sau filter (180d, no-assignee) với data thật.
+- **Deploy + demo** với user thật (phase-03).
+
+### Code review status (2026-08-14)
+
+`npm test` (4 workspaces: api 8, github 8, scoring 17, web 1) + `npm run typecheck` → **PASS** (34 tests).
+
+**Đã verify:**
+- Bot filter end-to-end: `discover.ts` `isBotOwner(repo.owner)` → `repos.is_bot_owned` (insert + onConflictDoUpdate) → score-compute `repo.isBotOwned` → scoring hard filter `repo_bot_owned` → API list `eq(repos.isBotOwned, false)` + `scores.total>0` + `hardFilters=[]`. Migration 0001 additive (ADD COLUMN default false + CREATE INDEX). List excludes bot issue; detail shows `hardFilters:['repo_bot_owned']` + `isBotOwned:true` (transparency).
+- DisplayedScore: **persisted** `scores.displayed_score`, API list + detail đọc stored → verified khớp nhau cho mọi issue (không còn double-round ±1, ~18% trường hợp confidence≠high trước đây).
+- Weights: `displayWeights()` từ `DEFAULT_CONFIG` — single source, API không còn hardcode.
+
+**Findings đã fix (2026-08-14):**
+1. ~~`issue-detail.ts:66` — displayedScore double-round~~ → **FIXED**: `displayedScore` persist từ `ScoreResult` (migration 0002), API đọc stored value.
+2. ~~`calibrate.ts:129-138` — NaN% + false FAIL khi 0 rows~~ → **FIXED**: early-exit "no issues to calibrate".
+3. ~~`calibrate.ts:94` — closeDb trong grade() khi rl mở~~ → **FIXED**: hoist `closeDb()` + `rl.close()` vào `finally` trong `run()`.
+4. Weights hardcode → **FIXED**: `displayWeights()` từ config, dùng chung 2 route.
+5. `repo_metrics_computed_at_idx` — chấp nhận (forward-looking cho staleness sweep tương lai).
+6. Backfill `is_bot_owned=false` — chấp nhận (bot repos hiếm khi có issue GFI đã crawl).

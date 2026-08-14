@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { and, eq } from "drizzle-orm";
 import { issues, scores, repos, repoMetrics } from "@firstpr/db";
+import { displayWeights } from "@firstpr/scoring";
 import { db } from "../lib/auth.js";
 
 /**
@@ -49,6 +50,7 @@ export async function issueDetailRoutes(app: FastifyInstance) {
         stars: repo.stargazersCount,
         language: repo.language,
         archived: repo.archived,
+        isBotOwned: repo.isBotOwned,
         pushedAt: repo.pushedAt,
       },
       score: {
@@ -61,8 +63,8 @@ export async function issueDetailRoutes(app: FastifyInstance) {
         metricVersion: score?.metricVersion ?? 1,
         recomputedAt: score?.recomputedAt ?? score?.computedAt ?? null,
         hardFilters: score?.hardFilters ?? [],
-        displayedScore:
-          score?.total != null ? Math.round(score.total * (score.confidence === "high" ? 1 : score.confidence === "medium" ? 0.9 : 0.7)) : 0,
+        displayedScore: score?.displayedScore ?? 0,
+        weights: displayWeights(),
       },
       signals: {
         sampleCount: metrics?.sampleCount ?? 0,

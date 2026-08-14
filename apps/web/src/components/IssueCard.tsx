@@ -40,7 +40,7 @@ export default function IssueCard({ issue, onOpenBreakdown }: Props) {
           </div>
         </div>
         <div className="shrink-0" onClick={(e) => e.preventDefault()}>
-          <ScoreChip score={issue.score} onClick={() => onOpenBreakdown(issue)} />
+          <ScoreChip score={issue.displayedScore} onClick={() => onOpenBreakdown(issue)} />
         </div>
       </div>
     </a>

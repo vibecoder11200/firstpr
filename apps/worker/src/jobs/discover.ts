@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { createDb, repos, issues } from "@firstpr/db";
-import { GitHubClient, stripHtml, toSearchText } from "@firstpr/github";
+import { GitHubClient, stripHtml, toSearchText, isBotOwner } from "@firstpr/github";
 import { env } from "../env.js";
 import { enqueueRepoMetrics, enqueueScoreCompute, type CrawlJobData } from "../queue.js";
 
@@ -64,6 +64,7 @@ interface ResolvedRepo {
   needMetrics: boolean;
   language: string;
   stargazersCount: number;
+  isBotOwned: boolean;
 }
 
 async function upsertIssue(
@@ -164,6 +165,7 @@ async function resolveRepo(
     needMetrics,
     language: (repo.language ?? "other").toLowerCase(),
     stargazersCount: repo.stargazers_count ?? 0,
+    isBotOwned: isBotOwner(repo.owner),
   };
 }
 
@@ -174,6 +176,7 @@ async function upsertRepoRow(
 ): Promise<boolean> {
   const [owner, name] = fullName.split("/");
   if (!owner || !name) return false;
+  const isBotOwned = isBotOwner(repo.owner);
   await db
     .insert(repos)
     .values({
@@ -185,6 +188,7 @@ async function upsertRepoRow(
       stargazersCount: repo.stargazers_count ?? 0,
       language: repo.language ?? "other",
       archived: repo.archived ?? false,
+      isBotOwned,
       pushedAt: repo.pushed_at ? new Date(repo.pushed_at) : null,
       fork: repo.fork ?? false,
       lastCrawledAt: new Date(),
@@ -196,6 +200,7 @@ async function upsertRepoRow(
         stargazersCount: repo.stargazers_count ?? 0,
         language: repo.language ?? "other",
         archived: repo.archived ?? false,
+        isBotOwned,
         pushedAt: repo.pushed_at ? new Date(repo.pushed_at) : null,
         lastCrawledAt: new Date(),
       },
