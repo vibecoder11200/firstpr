@@ -63,6 +63,8 @@ export async function scoreComputeJob(data: ScoreJobData): Promise<void> {
           state: (issue.state === "open" ? "open" : "closed") as "open" | "closed",
           pullRequestId: issue.pullRequestId,
           createdAt: issue.createdAt,
+          title: issue.title,
+          labels: issue.labels,
         },
       };
 

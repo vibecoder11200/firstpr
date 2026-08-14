@@ -140,29 +140,55 @@ async function scoreAllStale(db: ReturnType<typeof createDb>): Promise<number> {
           state: (issue.state === "open" ? "open" : "closed") as "open" | "closed",
           pullRequestId: issue.pullRequestId,
           createdAt: issue.createdAt,
+          title: issue.title,
+          labels: issue.labels,
         },
       };
       const result = computeScore(input, DEFAULT_CONFIG);
-      const inserted = await db
-        .insert(scores)
-        .values({
-          issueId: issue.id,
-          total: result.score,
-          displayedScore: result.displayedScore,
-          scoreMaintainer: result.maintainerResponsiveness,
-          scoreRepoHealth: result.repoHealth,
-          scoreIssueFreshness: result.issueFreshness,
-          scoreIssueClarity: result.issueClarity,
-          confidence: result.confidence,
-          hardFilters: result.excludedReasons,
-          recomputedAt: new Date(),
-          computedAt: new Date(),
-        })
-        .returning({ id: scores.id });
-      await db
-        .update(issues)
-        .set({ scoreId: inserted[0]!.id, stale: false, lastScoreComputedAt: new Date() })
-        .where(eq(issues.id, issue.id));
+      // Update the existing linked score in place (no history bloat) — the
+      // worker's job keeps score history; the dev batch tool overwrites.
+      if (issue.scoreId != null) {
+        await db
+          .update(scores)
+          .set({
+            total: result.score,
+            displayedScore: result.displayedScore,
+            scoreMaintainer: result.maintainerResponsiveness,
+            scoreRepoHealth: result.repoHealth,
+            scoreIssueFreshness: result.issueFreshness,
+            scoreIssueClarity: result.issueClarity,
+            confidence: result.confidence,
+            hardFilters: result.excludedReasons,
+            recomputedAt: new Date(),
+            computedAt: new Date(),
+          })
+          .where(eq(scores.id, issue.scoreId));
+        await db
+          .update(issues)
+          .set({ stale: false, lastScoreComputedAt: new Date() })
+          .where(eq(issues.id, issue.id));
+      } else {
+        const inserted = await db
+          .insert(scores)
+          .values({
+            issueId: issue.id,
+            total: result.score,
+            displayedScore: result.displayedScore,
+            scoreMaintainer: result.maintainerResponsiveness,
+            scoreRepoHealth: result.repoHealth,
+            scoreIssueFreshness: result.issueFreshness,
+            scoreIssueClarity: result.issueClarity,
+            confidence: result.confidence,
+            hardFilters: result.excludedReasons,
+            recomputedAt: new Date(),
+            computedAt: new Date(),
+          })
+          .returning({ id: scores.id });
+        await db
+          .update(issues)
+          .set({ scoreId: inserted[0]!.id, stale: false, lastScoreComputedAt: new Date() })
+          .where(eq(issues.id, issue.id));
+      }
       total += 1;
     }
   }
@@ -170,12 +196,21 @@ async function scoreAllStale(db: ReturnType<typeof createDb>): Promise<number> {
 }
 
 async function main() {
+  const db = createDb(process.env.DATABASE_URL!);
+
+  // --score-only: re-score stale issues with the current model (no GitHub calls).
+  if (process.argv.includes("--score-only")) {
+    const scored = await scoreAllStale(db);
+    console.log(`score-only done: ${scored} issues scored`);
+    await closeDb();
+    return;
+  }
+
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
     console.error("GITHUB_TOKEN unset — cannot run repo-metrics.");
     process.exit(1);
   }
-  const db = createDb(process.env.DATABASE_URL!);
   const client = new GitHubClient({ token });
 
   const targets = await db

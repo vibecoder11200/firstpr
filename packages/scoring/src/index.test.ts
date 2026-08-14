@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeScore, scoreMaintainerResponsiveness, scoreIssueClarity } from "../src/index.js";
+import { computeScore, scoreMaintainerResponsiveness, scoreIssueClarity, scoreJuniorFit } from "../src/index.js";
 
 describe("scoring — maintainer responsiveness", () => {
   it("scores 0 when no metrics", () => {
@@ -114,5 +114,82 @@ describe("computeScore — full pipeline", () => {
     });
     expect(r.confidence).toBe("low");
     expect(r.displayedScore).toBeLessThan(r.score);
+  });
+
+  it("blends junior-fit into clarity: docs-safe beats advanced kernel bug", () => {
+    const metrics = {
+      sampleCount: 30,
+      medianFirstResponseHours: 16,
+      mergeRate90d: 85,
+      computedAt: new Date(),
+    };
+    const docsSafe = computeScore({
+      ...base,
+      repoMetrics: metrics,
+      issue: {
+        ...base.issue,
+        title: "Write a tutorial and docs guide for the setup",
+        labels: ["good first issue"],
+      },
+    });
+    const advanced = computeScore({
+      ...base,
+      repoMetrics: metrics,
+      issue: {
+        ...base.issue,
+        title: "LoRAMLPv6.apply: 17 positional parameters, kernel internals, unsafe FFI",
+        labels: [],
+      },
+    });
+    // Advanced task must no longer out-score the beginner-safe docs task.
+    expect(advanced.score).toBeLessThan(docsSafe.score);
+  });
+});
+
+describe("scoreJuniorFit — task approachability (D16)", () => {
+  it("neutral when no markers", () => {
+    const s = scoreJuniorFit({
+      body: "A plain description.",
+      state: "open",
+      pullRequestId: null,
+      createdAt: new Date(),
+    });
+    expect(s).toBe(50);
+  });
+
+  it("scores beginner-safe docs/tutorial markers high", () => {
+    const s = scoreJuniorFit({
+      body: "Add documentation for the setup guide and a tutorial example.",
+      title: "Document how to write a user guide",
+      state: "open",
+      pullRequestId: null,
+      createdAt: new Date(),
+      labels: ["good first issue"],
+    });
+    expect(s).toBeGreaterThan(60);
+  });
+
+  it("penalizes advanced complexity markers", () => {
+    const s = scoreJuniorFit({
+      body: "LoRAMLPv6.apply takes 17 positional parameters and touches kernel internals with unsafe pointers.",
+      title: "Fix the 17 positional parameters",
+      state: "open",
+      pullRequestId: null,
+      createdAt: new Date(),
+    });
+    expect(s).toBeLessThan(40);
+  });
+
+  it("does not let a docs task about an advanced topic fall below neutral", () => {
+    // "Write documentation for the kernel API" is still a beginner-fit task —
+    // the docs task-type marker must win over the "kernel" content word.
+    const s = scoreJuniorFit({
+      body: "Document the kernel and its state machine so newcomers understand how the 17 positional parameters work.",
+      title: "Write documentation for the kernel API",
+      state: "open",
+      pullRequestId: null,
+      createdAt: new Date(),
+    });
+    expect(s).toBeGreaterThanOrEqual(50);
   });
 });

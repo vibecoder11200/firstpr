@@ -8,7 +8,7 @@ branch: main
 phases: [phase-01, phase-02, phase-03, phase-04]
 blockedBy: []
 phase-01-status: DONE (2026-08-14)
-phase-02-status: DONE (2026-08-14, G1 pending)
+phase-02-status: DONE (2026-08-14); G1 FAIL 45% (2026-08-15) — junior-fit recalibrated, agreement unchanged, weight rebalance pending (product decision)
 ---
 
 # FirstPR MVP — Plan Build 4 Tuần

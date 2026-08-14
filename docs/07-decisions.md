@@ -77,6 +77,7 @@ Bổ sung cho D11 — acceptance criterion:
   1. **Doc/kernel complexity không phân giải:** body dài & có repro → 92 cho cả tutorial notebook, state-validator bug, `birth()` method, doc hardware tiers — không phân biệt junior-fit. Trusted B/C (repo health 20%) gần như hằng số với repo có metrics → toàn bộ trọng số dồn vào Clarity (body length).
   2. **"Safe-zone"/docs-only không được thưởng:** issue gắn cờ "safe zone: docs only, no core risk" (retinue, localmem, GCode) bị 62 dù lý tưởng cho junior.
 - **Hướng recalibrate (đề xuất, chờ chủ dự án):** thêm tín hiệu **task complexity / beginner-fit** trong Clarity — gắn cờ từ khoá (docs, tutorial, safe-zone, first-timers-only) + phạt pattern phức tạp (nhiều positional param, kernel/state-machine internals); cân nhắc hạ trọng số clearness còn nếu body dài nhưng task khó.
+- **Kết quả recalibrate (2026-08-15):** tín hiệu junior-fit implement `packages/scoring` (`scoreJuniorFit`, blend 0.5), feed title+labels. **Complexity penalty HOẠT ĐỘNG đúng hướng** (forge-kernels 92→81, CONTINUUM 92→85) nhưng **agreement vẫn 45%** trên cùng 20 issues: bonus beginner-safe không thắng được **50% trọng số repo-health+responsiveness** — repo nhỏ (ít stars/sample) kéo docs-issue xuống bất kể task phù hợp junior. → Cần cân lại trọng số (giảm B/C/docs hoặc tách fit thành term riêng) — là quyết định sản phẩm, chờ chủ dự án.
 
 ---
 

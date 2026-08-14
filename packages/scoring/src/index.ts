@@ -38,6 +38,9 @@ export interface ScoreInput {
     pullRequestId: number | null;
     createdAt: Date;
     closedAt?: Date | null;
+    /** title + labels feed the junior-fit signal; optional for back-compat */
+    title?: string | null;
+    labels?: string[] | null;
   };
 }
 
@@ -75,6 +78,22 @@ export interface ScoringConfig {
   maxNoPushDays: number;
   /** confidence thresholds (sample count + staleness in days) */
   confidence: { minSamplesHigh: number; minSamplesMedium: number; maxAgeDays: number };
+  /**
+   * junior-fit signal (G1 recalibration, D16): fold "task approachability"
+   * into the Clarity group so a long body of ADVANCED code doesn't score as
+   * high as a short beginner-safe task. Multipliers, all positive.
+   */
+  fit: {
+    /** blend fraction [0..1] of the fit signal into the clarity sub-score */
+    blend: number;
+    /** normalized terms (regex source, +weight) that mark a task as
+     *  beginner-safe: docs, tests, tutorials, safe-zone, first-timers-only */
+    beginnerSafe: { pattern: string; weight: number }[];
+    /** normalized terms that mark a task as advanced/complex (penalize) */
+    advanced: { pattern: string; weight: number }[];
+    /** label-level beginner markers (e.g. `good first issue`) — bonus */
+    beginnerLabels: string[];
+  };
 }
 
 export const DEFAULT_CONFIG: ScoringConfig = {
@@ -88,6 +107,33 @@ export const DEFAULT_CONFIG: ScoringConfig = {
   maxIssueAgeDays: 180,
   maxNoPushDays: 90,
   confidence: { minSamplesHigh: 30, minSamplesMedium: 10, maxAgeDays: 30 },
+  fit: {
+    blend: 0.5,
+    // beginner-safe markers → bonus
+    beginnerSafe: [
+      { pattern: "\\bdocs?\\b", weight: 12 },
+      { pattern: "\\bdocument(ation|ed)?\\b", weight: 12 },
+      { pattern: "\\btutorial\\b", weight: 14 },
+      { pattern: "\\bguide\\b", weight: 12 },
+      { pattern: "\\bsafe-?zone\\b", weight: 20 },
+      { pattern: "\\bfirst-?timers?-only\\b", weight: 20 },
+      { pattern: "\\btests?\\b|\\btest coverage\\b", weight: 10 },
+      { pattern: "\\bexample\\b", weight: 10 },
+      { pattern: "\\b(?:dev|development|project|environment|env)\\s+setup\\b|\\bgetting started\\b", weight: 12 },
+      { pattern: "\\b(?:add|write|create)\\b.*\\b(?:doc|guide|tutorial|example)s?\\b", weight: 14 },
+    ],
+    // advanced/complex markers → penalty
+    advanced: [
+      { pattern: "\\b\\d{1,2}\\s+positional\\s+parameters?\\b", weight: 30 },
+      { pattern: "\\bpositional\\s+parameters?\\b", weight: 22 },
+      { pattern: "\\bkernel\\b", weight: 18 },
+      { pattern: "\\bstate-?machine\\b|\\binternals\\b", weight: 16 },
+      { pattern: "\\bLLVM\\b|\\bFFI\\b|\\bSIMD\\b|\\bassembly\\b|\\bunsafe\\b", weight: 18 },
+      { pattern: "\\b(?:advanced|complex|low-?level|hard)\b", weight: 14 },
+      { pattern: "\\bpositional\\b", weight: 10 },
+    ],
+    beginnerLabels: ["good first issue", "first-timers-only", "good first contribution", "help wanted", "beginner", "docs", "documentation"],
+  },
 };
 
 const clamp = (n: number, lo = 0, hi = 100): number => Math.min(hi, Math.max(lo, n));
@@ -136,6 +182,54 @@ export function scoreIssueClarity(
   const len = body.length;
   if (len < cfg.clarityMinBodyChars) return 0;
   return Math.round(clamp((len / cfg.clarityPerfectBodyChars) * 100));
+}
+
+/**
+ * Junior-fit signal (G1 recalibration, D16). Scores a task on how
+ * approachable it is for a newcomer, 0–100, independent of body length.
+ * Beginner-safe markers (docs/tests/tutorials/safe-zone/labels) raise it;
+ * advanced-complexity markers (positional params, kernel/state-machine
+ * internals, FFI/unsafe) lower it. `computeScore` blends this into the
+ * Clarity group so a long ADVANCED writeup no longer scores like a
+ * beginner-safe task.
+ */
+export function scoreJuniorFit(
+  issue: ScoreInput["issue"],
+  cfg: ScoringConfig = DEFAULT_CONFIG,
+): number {
+  let score = 50; // neutral starting point
+  const text = [
+    issue.title ?? "",
+    issue.body ?? "",
+    ...(issue.labels ?? []),
+  ].join(" ").toLowerCase();
+
+  const matchAll = (terms: { pattern: string; weight: number }[]): number => {
+    let n = 0;
+    for (const t of terms) {
+      const re = new RegExp(t.pattern, "gi");
+      n += (text.match(re)?.length ?? 0) * t.weight;
+    }
+    return n;
+  };
+
+  const beginnerBonus = matchAll(cfg.fit.beginnerSafe);
+  const advancedPenalty = matchAll(cfg.fit.advanced);
+  const hasBeginnerLabel = cfg.fit.beginnerLabels.some((l) =>
+    (issue.labels ?? []).some((x) => x.toLowerCase().includes(l)),
+  );
+  if (hasBeginnerLabel) score += 10;
+
+  score += beginnerBonus;
+
+  // A docs/tutorial task is still approachable even if it TOUCHES an advanced
+  // topic ("Add documentation for the kernel API"). When a beginner-safe
+  // task-type marker fired, don't let content words about the topic drag the
+  // fit below neutral — treat task-type, not topic, as complexity.
+  const taskTypeMarker =
+    /\b(?:docs?|document(?:ation)?|tutorial|guide|write|example|setup|getting started)\b/.test(text);
+  score -= taskTypeMarker ? Math.min(advancedPenalty, beginnerBonus) : advancedPenalty;
+  return Math.round(clamp(score));
 }
 
 export function hardFilters(
@@ -192,7 +286,11 @@ export function computeScore(
   );
   const repoHealth = scoreRepoHealth(input.repo, cfg);
   const issueFreshness = scoreIssueFreshness(input.issue.createdAt, cfg);
-  const issueClarity = scoreIssueClarity(input.issue.body, cfg);
+  // Clarity = how well-described AND how approachable for a junior (G1 D16).
+  // Blends the body-length clarity with the junior-fit signal.
+  const rawClarity = scoreIssueClarity(input.issue.body, cfg);
+  const fit = scoreJuniorFit(input.issue, cfg);
+  const issueClarity = Math.round(clamp(rawClarity * (1 - cfg.fit.blend) + fit * cfg.fit.blend));
 
   const raw =
     maintainerResponsiveness * cfg.weights.maintainer +

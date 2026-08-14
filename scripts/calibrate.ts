@@ -28,6 +28,9 @@ function arg(name: string): string | undefined {
 }
 
 const count = Number(arg("--count") ?? "20");
+const pinned = arg("--issues")
+  ? arg("--issues")!.split(",").map((n) => Number(n.trim())).filter((n) => Number.isFinite(n))
+  : null;
 const dbUrl =
   arg("--db") ??
   process.env.CALIBRATE_DB_URL ??
@@ -69,6 +72,10 @@ async function grade(): Promise<Graded[]> {
         eq(issues.state, "open"),
         isNull(issues.pullRequestId),
         sql`${repos.fullName} NOT IN ('scratch/repo', 'facebook/react', 'vercel/next.js', 'python/cpython')`,
+        // --issues "1,2,3": pin an exact issue set for before/after comparison
+        pinned && pinned.length > 0
+          ? sql`${issues.id} IN (${sql.join(pinned.map((n) => sql`${n}`), sql`, `)})`
+          : sql`true`,
       ),
     )
     .orderBy(desc(scores.total))

@@ -109,6 +109,7 @@ Nhiều hạng mục phase-02 đã được build sẵn trong phase-01 (confiden
 
 **Còn lại (cần data thật + human):**
 - ~~**G1 gate:** chạy calibrate với 20 issues THẬT → quyết định ≥ 80%~~ → **ĐÃ CHẠY (2026-08-15): 45% — FAIL.** Chi tiết + hướng recalibrate ở `07-decisions.md` D16. Phải đào lại scoring trước, KHÔNG mở rộng (theo roadmap).
+- **G1 recalibration (#13) — DONE (2026-08-15, agreement vẫn 45%):** thêm tín hiệu junior-fit `scoreJuniorFit` (blend 0.5 vào Clarity), feed `title+labels` từ worker + crawl-batch; crawl-batch đổi sang update-in-place (hết bloat scores); calibrate thêm `--issues` pin + oversample ×8; log kết quả ở `07-decisions.md`. Kết quả: **complexity penalty hoạt động đúng hướng** (forge-kernels 92→81, CONTINUUM 92→85) nhưng **agreement KHÔNG đổi (45%)** — bonus beginner-safe không thắng nổi 50% trọng số repo-health+responsiveness (repo nhỏ kéo docs-issue xuống). → **Next step: cân lại trọng số (giảm B/C hoặc tách fit thành term riêng) — quyết định sản phẩm, chờ chủ dự án. KHÔNG mở rộng.**
 - **Hard-filter validation table:** trước/sau filter (180d, no-assignee) với data thật.
 - **Deploy + demo** với user thật (phase-03).
 
