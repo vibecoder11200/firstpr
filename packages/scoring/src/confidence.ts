@@ -44,7 +44,7 @@ export function displayedScore(
 
 /**
  * Display weights as whole percentages, derived from the scoring config so the
- * UI never hardcodes the 30/20/15/35 split. Single source for both routes.
+ * UI never hardcodes the split. Single source for both routes.
  */
 export function displayWeights(): {
   maintainer: number;

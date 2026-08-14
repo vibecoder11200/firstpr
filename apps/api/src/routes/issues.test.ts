@@ -64,10 +64,10 @@ describe("GET /api/issues/:id", () => {
     const body = res.json();
     expect(body.score.displayedScore).toBeDefined();
     expect(body.score.weights).toMatchObject({
-      maintainer: 30,
-      repoHealth: 20,
+      maintainer: 20,
+      repoHealth: 15,
       freshness: 15,
-      clarity: 35,
+      clarity: 50,
     });
     expect(body.score.confidence).toBe("medium");
     // displayedScore is persisted at write time (not recomputed from rounded total)

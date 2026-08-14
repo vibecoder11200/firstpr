@@ -19,14 +19,14 @@
 ### 1.1 Công thức tổng
 
 ```
-Score (0-100) = 30%·MaintainerResponsiveness + 20%·RepoHealth + 15%·IssueFreshness + 35%·IssueClarity
+Score (0-100) = 20%·MaintainerResponsiveness + 15%·RepoHealth + 15%·IssueFreshness + 50%·IssueClarity&Fit
 ```
 
-**Lý do trọng số (Phương án B — Junior-first):**
-- **IssueClarity 35% (cao nhất):** khán giả mục tiêu là **junior** — FSE 2020 chỉ ra lý do newcomer fail nhiều lần chủ yếu là **issue mơ hồ, không hiểu nhiệm vụ**. Với junior, "hiểu được việc" ngang hàng (thậm chí trên) "có người giúp". Score này là **junior-optimized**, không phải score chung cho mọi dev.
-- **MaintainerResponsiveness 30%:** vẫn rất quan trọng (ICSE 2023: expert involvement thúc đẩy success) — nhưng không phải yếu tố số 1 với junior như khi score cho dev nói chung.
-- **RepoHealth 20%:** "repo còn sống" đã được tách làm **hard filter** (§1.0) — không tính lại ở đây. Phần đóng góp 20% chỉ gồm *khác biệt còn lại*: stars, license, CONTRIBUTING, has_issues → **hết double-count với Responsiveness**.
-- **IssueFreshness 15%:** điều kiện cơ bản (issue tươi) nhưng ít mang tính quyết định nhất với kết quả PR đầu của junior.
+**Lý do trọng số (Phương án B — Junior-first, đã rebalance G1 2026-08-15):**
+- **IssueClarity&Fit 50% (cao nhất):** khán giả mục tiêu là **junior** — FSE 2020 chỉ ra lý do newcomer fail nhiều lần chủ yếu là **issue mơ hồ, không hiểu nhiệm vụ**. Sau G1 rebalance, nhóm này gồm **clarity (body rõ)** + **junior-fit (task approachable)** — trọng số nâng 35→50 vì calibrate cho thấy docs/beginner issue trên repo nhỏ bị kéo xuống bởi maintainer+repoHealth 50%. Giờ "có hiểu được việc + có phù hợp beginner" quyết định.
+- **MaintainerResponsiveness 30→20%:** vẫn quan trọng (ICSE 2023: expert involvement thúc đẩy success), nhưng repo nhỏ/fresh không nên chôn một issue beginner-hoàn hảo chỉ vì ít sample/stars.
+- **RepoHealth 20→15%:** "repo còn sống" đã là **hard filter** (§1.0) — không tính lại. Phần còn lại (stars, license, CONTRIBUTING) bớt quyết định để beginner-fit được lên.
+- **IssueFreshness 15%:** điều kiện cơ bản (issue tươi), giữ nguyên.
 
 ### 1.2 Nhóm A: Maintainer Responsiveness (30%)
 

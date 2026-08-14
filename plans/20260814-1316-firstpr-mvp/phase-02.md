@@ -1,7 +1,7 @@
 ---
 phase: 2
 title: "Scoring sắc + breakdown UI + cache"
-status: DONE_CODE, G1 FAIL — recalibrate scoring
+status: DONE_CODE, G1 55% — keyword ceiling; needs outcome-feedback
 priority: P1
 dependencies: [phase-01]
 ---

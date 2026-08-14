@@ -11,5 +11,7 @@ export default defineConfig({
   test: {
     environment: "node",
     testTimeout: 20_000,
+    // stale compiled output must not be picked up as tests
+    exclude: ["dist/**", "node_modules/**"],
   },
 });

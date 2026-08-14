@@ -97,7 +97,9 @@ export interface ScoringConfig {
 }
 
 export const DEFAULT_CONFIG: ScoringConfig = {
-  weights: { maintainer: 0.3, repoHealth: 0.2, freshness: 0.15, clarity: 0.35 },
+  // G1 rebalance (D16): junior-fit (clarity+fit) dominates over repo size.
+  // MaintainerResponsiveness 30→20, RepoHealth 20→15, Freshness 15, Clarity 35→50.
+  weights: { maintainer: 0.2, repoHealth: 0.15, freshness: 0.15, clarity: 0.5 },
   freshnessMaxDays: 30,
   clarityPerfectBodyChars: 500,
   clarityMinBodyChars: 40,
