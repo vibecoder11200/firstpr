@@ -73,8 +73,11 @@ export async function enqueueDiscover(): Promise<void> {
       "discover",
       { type: "discover", languages: ["python", "typescript", "javascript"], from, to },
       {
-        // singleton: one discover per window at a time
-        jobId: `discover:${from}:${to}`,
+        // singleton: one discover per window at a time. BullMQ job IDs are used
+        // as Redis key suffixes; a `:` is only allowed when the id splits into
+        // exactly 3 parts (repeatable-job compat). A single `:` is rejected, so
+        // use a colon-free day-boundary epoch timestamp.
+        jobId: `discover-${Math.floor(end / 86_400_000)}`,
         attempts: 3,
         backoff: { type: "exponential", delay: 30_000 },
         removeOnComplete: { age: 86_400 },
@@ -88,7 +91,8 @@ export async function enqueueRepoMetrics(repoId: number): Promise<void> {
     "repo-metrics",
     { type: "repo-metrics", repoId },
     {
-      jobId: `repo-metrics:${repoId}`,
+      // colon-free jobId (a single `:` is rejected by bullMQ)
+      jobId: `repo-metrics-${repoId}`,
       attempts: 3,
       backoff: { type: "exponential", delay: 60_000 },
       removeOnComplete: { age: 86_400 },

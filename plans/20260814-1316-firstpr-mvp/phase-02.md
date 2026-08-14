@@ -128,3 +128,15 @@ Nhiều hạng mục phase-02 đã được build sẵn trong phase-01 (confiden
 4. Weights hardcode → **FIXED**: `displayWeights()` từ config, dùng chung 2 route.
 5. `repo_metrics_computed_at_idx` — chấp nhận (forward-looking cho staleness sweep tương lai).
 6. Backfill `is_bot_owned=false` — chấp nhận (bot repos hiếm khi có issue GFI đã crawl).
+
+### Real-data crawl fixes (2026-08-15)
+
+Chạy crawler thật (G1 prep) phát hiện 3 bug phase-01 chưa từng chạy đúng vì thiếu token:
+
+1. **BullMQ jobId chứa `:` bị reject** (`Custom Id cannot contain :`) — jobId `discover:${ISO}` (nhiều `:`) và `repo-metrics:${id}` (1 `:`) đều fail. BullMQ chỉ cho phép 0 `:` hoặc đúng 2 `:` (3 parts). **Fix:** `discover-${dayEpoch}`, `repo-metrics-${repoId}` (colon-free). `score-compute:${a}:${b}` (2 `:`) giữ nguyên.
+2. **GitHub Search bắt buộc `is:issue`** — query thiếu qualifier → `Query must include 'is:issue' or 'is:pull-request'`. **Fix:** thêm `is:issue` vào query discover (đồng thời loại PR ở tầng API). Verified: 7d python trả total_count=1982.
+3. **Issue/repo id GitHub vượt int4 (2^31)** — issue id 5153300123 > int4 → `integer out of range`. **Fix:** migration `0003_bright_sue_storm` chuyển `repos.id`, `issues.id`, `issues.repo_id`, `repo_metrics.repo_id`, `scores.issue_id` sang `bigint`.
+
+Thêm `scripts/crawl-batch.ts` — driver batch self-contained (repo-metrics + score-compute cho repo đã crawl, không import Redis để tránh phình memory) cho calibrate.
+
+**Kết quả crawl thật (2026-08-15):** 159 repos, 396 issues, 39 repos có metrics, 250 issues open đã score (125 confidence high/medium có metrics thật). Đủ cho G1 (cần 20).

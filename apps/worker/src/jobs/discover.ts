@@ -34,7 +34,9 @@ export async function discoverJob(data: CrawlJobData): Promise<void> {
 
   for (const lang of languages) {
     for (let page = 1; page <= 10; page++) {
-      const q = `label:"good first issue" language:${lang} created:${from}..${to}`;
+      // GitHub Search requires an explicit `is:issue` qualifier (else the API
+      // rejects the query); excludes PRs at the API level as a first anti-gaming cut.
+      const q = `label:"good first issue" language:${lang} created:${from}..${to} is:issue`;
       const res = await client.searchIssues(q, { perPage: 100, page, job: "discover" });
 
       for (const item of res.data.items) {

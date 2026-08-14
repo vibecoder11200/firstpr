@@ -18,7 +18,7 @@ import * as readline from "node:readline/promises";
 // =====================================================================
 
 const require = createRequire(import.meta.url);
-const { eq } = require("drizzle-orm") as typeof import("drizzle-orm");
+const { eq, and, isNull, sql, desc } = require("drizzle-orm") as typeof import("drizzle-orm");
 const { createDb, closeDb, repos, issues, scores, repoMetrics } = require("@firstpr/db") as typeof import("@firstpr/db");
 const { computeScore, DEFAULT_CONFIG } = require("@firstpr/scoring") as typeof import("@firstpr/scoring");
 
@@ -49,6 +49,10 @@ interface Graded {
 
 async function grade(): Promise<Graded[]> {
   const db = createDb(dbUrl);
+  // Calibrate against REAL data: open issues with a score AND repo_metrics
+  // backing them (so confidence is meaningful), excluding the seeded
+  // scratch rows used by dev/tests. Sort by score desc gives a spread of
+  // qualities; use a high cap so the human grades a representative sample.
   const rows = await db
     .select({
       issue: issues,
@@ -58,13 +62,24 @@ async function grade(): Promise<Graded[]> {
     })
     .from(issues)
     .innerJoin(repos, eq(issues.repoId, repos.id))
-    .leftJoin(scores, eq(issues.scoreId, scores.id))
-    .leftJoin(repoMetrics, eq(repos.repoMetricsId, repoMetrics.id))
-    .where(eq(issues.state, "open"))
-    .limit(count);
+    .innerJoin(scores, eq(issues.scoreId, scores.id))
+    .innerJoin(repoMetrics, eq(repos.repoMetricsId, repoMetrics.id))
+    .where(
+      and(
+        eq(issues.state, "open"),
+        isNull(issues.pullRequestId),
+        sql`${repos.fullName} NOT IN ('scratch/repo', 'facebook/react', 'vercel/next.js', 'python/cpython')`,
+      ),
+    )
+    .orderBy(desc(scores.total))
+    .limit(Math.max(1, count * 3)); // oversample, dedupe to `count` below;
 
   const graded: Graded[] = [];
+  const seenRepos = new Set<string>();
   for (const { issue, repo, score, metrics } of rows) {
+    if (graded.length >= count) break;
+    if (seenRepos.has(repo.fullName)) continue; // one issue per repo for a representative sample
+    seenRepos.add(repo.fullName);
     const confidence = score?.confidence ?? "low";
     const raw = score?.total ?? 0;
     // persisted displayed score (computed from unrounded raw at score time)

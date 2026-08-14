@@ -4,6 +4,7 @@ import {
   varchar,
   timestamp,
   integer,
+  bigint,
   boolean,
   index,
   uniqueIndex,
@@ -102,7 +103,8 @@ export const verifications = pgTable("verification", {
 export const repos = pgTable(
   "repos",
   {
-    id: integer("id").primaryKey(),
+    // GitHub repo id — can exceed int4 (2^31) on large repos → bigint
+    id: bigint("id", { mode: "number" }).primaryKey(),
     owner: text("owner").notNull(),
     name: text("name").notNull(),
     fullName: text("full_name").notNull(),
@@ -118,7 +120,7 @@ export const repos = pgTable(
     /** last push date (drives the 90-day health hard filter) */
     pushedAt: timestamp("pushed_at", { withTimezone: true }),
     fork: boolean("fork").notNull().default(false),
-    /** null when never crawled */
+    /** null when never crawled (internal identity, not GitHub-sourced) */
     repoMetricsId: integer("repo_metrics_id"),
     lastCrawledAt: timestamp("last_crawled_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -133,7 +135,7 @@ export const repoMetrics = pgTable(
   "repo_metrics",
   {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  repoId: integer("repo_id")
+  repoId: bigint("repo_id", { mode: "number" })
     .notNull()
     .references(() => repos.id, { onDelete: "cascade" }),
   /** sample size used to compute the metrics below */
@@ -159,8 +161,9 @@ export const repoMetrics = pgTable(
 export const issues = pgTable(
   "issues",
   {
-    id: integer("id").primaryKey(),
-    repoId: integer("repo_id")
+    // GitHub issue id — can exceed int4 (2^31) → bigint
+    id: bigint("id", { mode: "number" }).primaryKey(),
+    repoId: bigint("repo_id", { mode: "number" })
       .notNull()
       .references(() => repos.id, { onDelete: "cascade" }),
     number: integer("number").notNull(),
@@ -204,7 +207,7 @@ export const scores = pgTable(
   "scores",
   {
     id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-    issueId: integer("issue_id")
+    issueId: bigint("issue_id", { mode: "number" })
       .notNull()
       .references(() => issues.id, { onDelete: "cascade" }),
     /** 0–100 composite (raw formula, confidence NOT applied) */
